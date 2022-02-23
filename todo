@@ -1,0 +1,15 @@
+editor:
+    highlight editor on typing
+    syntax highlighting and suggesting for editor
+
+file management:
+    google auth
+    file tree & folder get
+    get text
+    save text
+        autosave?
+    save auth between sessions
+    cookies for what file was open
+
+visual:
+    logo

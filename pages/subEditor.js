@@ -5,8 +5,9 @@ import 'brace/theme/twilight';
 import 'brace/theme/xcode';
 import AceEditor from 'react-ace';
 
+
 const TextEditor = (props) => (
-  <div>
+  <div className="flex-1 h-full">
     <AceEditor
         mode={props.lan}
         theme={props.theme}
@@ -19,7 +20,7 @@ const TextEditor = (props) => (
         width="100%"
         showPrintMargin={false}
         showGutter={true}
-
+        height="100%"
     />
   </div>
 )

@@ -2,6 +2,7 @@ import { useState, useEffect} from 'react'
 
 import { BiCaretRightSquare, BiStopCircle} from 'react-icons/bi'
 import { IoHammer } from 'react-icons/io5'
+import ConnectionModal from './connectModal'
 
 export default function TopBar(props) {
     async function requestPort() {
@@ -12,9 +13,8 @@ export default function TopBar(props) {
             await props.port.open({ baudRate: 9600 })
         }
     }, [props.port])
-    function runAndBuild() {
-        
-    }
+
+
 
     return (
         <div className="bg-white shadow-lg absolute top-0 w-full z-20">
@@ -26,8 +26,11 @@ export default function TopBar(props) {
                                 <img className="hidden lg:block h-8 w-auto" src="https://tailwindui.com/img/logos/workflow-logo-indigo-500-mark-white-text.svg" alt="Workflow" />
                                 </div>
                                 <div className="hidden sm:block sm:ml-6">
-                                    <div className="flex space-x-4">
-                                        <button onClick={requestPort} className="main-button">{(props.port? "Connected..." :"Connect to Device")}</button>
+                                    <div className="flex space-x-4 justify-center">
+                                        <button onClick={(!props.port? requestPort : () => props.setShowModal(true))} className="main-button">{(props.port? "Connected..." :"Connect to Device")}</button>
+                                        {props.showModal ? 
+                                            <ConnectionModal setShowModal={props.setShowModal} port={props.port} setPort={props.setPort} requestPort={requestPort}/> 
+                                        : "" }
                                     </div>
                                 </div>
                         </div>

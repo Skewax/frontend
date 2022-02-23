@@ -10,6 +10,7 @@ const TextEditor = dynamic(import('./subEditor'), {
 
 
 export default function Editor(props) {
+
   
 
   function onChange(newValue) {
