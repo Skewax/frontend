@@ -17,7 +17,9 @@ a {
 .ace_gutter {
   background-color: white !important;
 }
-
+.ace_gutter-active-line {
+  background-color: white !important;
+}
 
 @tailwind base;
 @tailwind components;
@@ -25,6 +27,9 @@ a {
 
 @layer base {
   .main-button {
-    @apply text-blue-500 font-bold rounded-md transition-all bg-gradient-to-r from-slate-50 to-slate-100 p-2 transform hover:scale-105;
+    @apply text-blue-500 font-bold rounded-md transition-all bg-slate-200 p-2 transform hover:scale-105;
+  }
+  .file-button {
+    @apply px-1 hover:text-slate-400 transform hover:scale-110;
   }
 }

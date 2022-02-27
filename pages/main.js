@@ -7,6 +7,8 @@ import FileManager from './fileManager'
 import pbasic from './pbasic/compile_pbasic.pack'
 import { ToastContainer, toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import Head from 'next/head'
+import InfoBar from './infoBar'
 
 export default function Main(props) {
     // state management
@@ -15,6 +17,7 @@ export default function Main(props) {
     const [running, setRunning] = useState(0)
     const [code, setCode] = useState("")
     const [showConnectionModal, setShowConnectionModal] = useState(false)
+    const [activeFile, setActiveFile] = useState(null)
 
     useEffect(async() => {
       if ("serial" in navigator) {
@@ -64,23 +67,27 @@ export default function Main(props) {
 
     return (
         <main className="flex overflow:hidden">
+          <Head>
+            <title>Skewax</title>
+          </Head>
           <ToastContainer
-          position="bottom-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          transition={Flip}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
+            position="bottom-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            transition={Flip}
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
           />
           <TopBar port={port} setPort={setPort} running={running} setRunning={setRunning} compileAndLoad={compileAndLoad} serial={serial} setShowModal={setShowConnectionModal} showModal={showConnectionModal}/>
           <div className="flex h-full absolute pt-16 w-full">
-            <FileManager />
+            <FileManager setCode={setCode} code={code} activeFile={activeFile} setActiveFile={setActiveFile}/>
             <div className="flex flex-col w-full">
-              <Editor setCode={setCode}/>
+              <InfoBar activeFile={activeFile}/>
+              <Editor setCode={setCode} code={code}/>
               <Debug port={port} running={running} setRunning={setRunning}/>
             </div>
           </div>

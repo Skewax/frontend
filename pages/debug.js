@@ -41,7 +41,7 @@ export default function Debug(props) {
     }, [reader, props.running, debugText])
 
     return (
-        <div className="w-full h-56 border-t-2 border-slate-100 overflow-scroll">
+        <div className="w-full h-56 border-t-2 overflow-scroll bg-slate-50">
             <div className="w-full p-3 flex">
                 <button className="main-button">Debug Terminal</button>
             </div>

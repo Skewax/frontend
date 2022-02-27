@@ -9,7 +9,7 @@ import AceEditor from 'react-ace';
 const TextEditor = (props) => (
   <div className="flex-1 h-full">
     <AceEditor
-        mode={props.lan}
+        value={props.text}
         theme={props.theme}
         onChange={props.onChange}
         name="mainEditor"
@@ -17,10 +17,13 @@ const TextEditor = (props) => (
             $blockScrolling: true
         }}
         fontSize={16}
-        width="100%"
         showPrintMargin={false}
+        width="100%"
         showGutter={true}
         height="100%"
+        highlightActiveLine={false}
+        debounceChangePeriod={3000}
+        focus={true}
     />
   </div>
 )
