@@ -1,4 +1,5 @@
 import { useRef, useEffect, useState } from "react"
+import React from "react"
 
 function useOutsideAlerter(ref, stater) {
     useEffect(() => {
@@ -21,9 +22,9 @@ function useOutsideAlerter(ref, stater) {
 }
 
 
-export default function ConnectionModal(props) {
+const ConnectionModal = (props) => {
 
-    const [id, setId] = useState("")
+    const [id, setId] = useState("empty")
 
     async function connectNew() {
         await disconnect()
@@ -39,7 +40,7 @@ export default function ConnectionModal(props) {
     const wrapperRef = useRef(null)
     useOutsideAlerter(wrapperRef, props.setShowModal)
 
-    if(props.port){
+    if(props.port && id === "empty"){
         const { usbProductId, usbVendorId } = props.port.getInfo()
         setId(usbProductId)
     }
@@ -52,3 +53,5 @@ export default function ConnectionModal(props) {
         </div>
     )
 }
+
+export default ConnectionModal

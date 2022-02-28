@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
-import Editor from './editor'
-import Debug from './debug'
-import TopBar from './topBar'
-import FileManager from './fileManager'
+import Editor from '../components/editor'
+import Debug from '../components/debug'
+import TopBar from '../components/topBar'
+import FileManager from '../components/fileManager'
 import pbasic from './pbasic/compile_pbasic.pack'
 import { ToastContainer, toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Head from 'next/head'
-import InfoBar from './infoBar'
+import InfoBar from '../components/infoBar'
 
 export default function Main(props) {
     // state management
@@ -30,6 +30,7 @@ export default function Main(props) {
   
     async function compileAndLoad() {
       let compiled = pbasic.compile(code, false)
+      console.log(code)
       if(compiled.Error) {
         toast.error(compiled.Error.message, {
           position: "bottom-right",

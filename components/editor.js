@@ -2,7 +2,7 @@
 import dynamic from 'next/dynamic'
 
 
-const TextEditor = dynamic(() => import('../components/subEditor'), {
+const TextEditor = dynamic(() => import('./subEditor'), {
   ssr: false
 })
 

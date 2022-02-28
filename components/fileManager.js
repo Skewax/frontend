@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { MdPerson } from 'react-icons/md'
-import { auth, snapshotFiles } from '../components/firebase'
+import { auth, snapshotFiles } from './firebase'
 import { onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { updateDoc } from 'firebase/firestore'
 import { FaSearch } from 'react-icons/fa'
@@ -32,7 +32,6 @@ export default function FileManager(props) {
     }, [files])
 
     useEffect(async () => {
-        console.log('hi')
         if(props.activeFile && props.code != props.activeFile.text) {
             await updateDoc(props.activeFile.ref, {
                 text: props.code
