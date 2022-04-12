@@ -15,10 +15,14 @@ a {
   box-sizing: border-box;
 }
 .ace_gutter {
-  background-color: white !important;
+  background-color: #262739 !important;
 }
 .ace_gutter-active-line {
-  background-color: white !important;
+  background-color: #262739 !important;
+}
+
+.ace_editor{
+  background: #262739 !important;
 }
 
 @tailwind base;
@@ -30,6 +34,6 @@ a {
     @apply text-blue-500 font-bold rounded-md transition-all bg-slate-200 p-2 transform hover:scale-105;
   }
   .file-button {
-    @apply px-1 hover:text-slate-400 transform hover:scale-110;
+    @apply px-1 hover:text-slate-100 transform hover:scale-110 text-white;
   }
 }

@@ -1,16 +1,15 @@
 import brace from 'brace';
 import 'brace/mode/javascript';
 import 'brace/mode/c_cpp';
-import 'brace/theme/twilight';
-import 'brace/theme/xcode';
+import 'brace/theme/cobalt';
 import AceEditor from 'react-ace';
 
 
 const TextEditor = (props) => (
-  <div className="flex-1 h-full">
+  <div className="flex-1 h-full bg-green-100">
     <AceEditor
         value={props.text}
-        theme={props.theme}
+        theme="cobalt"
         onChange={props.onChange}
         name="mainEditor"
         editorProps={{
@@ -22,7 +21,6 @@ const TextEditor = (props) => (
         showGutter={true}
         height="100%"
         highlightActiveLine={false}
-        debounceChangePeriod={3000}
         focus={true}
     />
   </div>

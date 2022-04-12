@@ -4,7 +4,8 @@ import Editor from '../components/editor'
 import Debug from '../components/debug'
 import TopBar from '../components/topBar'
 import FileManager from '../components/fileManager'
-import pbasic from './pbasic/compile_pbasic.pack'
+import pbasic from '../components/pbasic/compile_pbasic.pack'
+import Flasher from '../components/pbasic/writeData'
 import { ToastContainer, toast, Flip } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Head from 'next/head'
@@ -30,7 +31,7 @@ export default function Main(props) {
   
     async function compileAndLoad() {
       let compiled = pbasic.compile(code, false)
-      console.log(code)
+      console.log(compiled)
       if(compiled.Error) {
         toast.error(compiled.Error.message, {
           position: "bottom-right",
@@ -43,8 +44,8 @@ export default function Main(props) {
           });
       }
       else if(compiled.Succeeded) {
-        const writer = port.writable.getWriter()
-        await writer.write(compiled.PacketBuffer)
+        const chipFlasher = new Flasher(port)
+        await chipFlasher.flash(compiled)
         setRunning(true)
       }
     }  
@@ -84,11 +85,13 @@ export default function Main(props) {
             pauseOnHover
           />
           <TopBar port={port} setPort={setPort} running={running} setRunning={setRunning} compileAndLoad={compileAndLoad} serial={serial} setShowModal={setShowConnectionModal} showModal={showConnectionModal}/>
-          <div className="flex h-full absolute pt-16 w-full">
+          <div className="flex h-full absolute pt-16 w-full bg-[#262739]">
             <FileManager setCode={setCode} code={code} activeFile={activeFile} setActiveFile={setActiveFile}/>
-            <div className="flex flex-col w-full">
-              <InfoBar activeFile={activeFile}/>
-              <Editor setCode={setCode} code={code}/>
+            <div className="flex w-full h-full">
+              <div className="flex flex-1 flex-col h-full">
+                <InfoBar activeFile={activeFile}/>
+                <Editor setCode={setCode} code={code}/>
+              </div>
               <Debug port={port} running={running} setRunning={setRunning}/>
             </div>
           </div>

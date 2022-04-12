@@ -32,3 +32,6 @@ yarn-error.log*
 # vercel
 .vercel
 /analyze
+
+*.pdf
+Preview.jpg

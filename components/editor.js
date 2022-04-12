@@ -17,8 +17,8 @@ export default function Editor(props) {
   }
 
   return (
-    <div className="flex-1 w-full h-full z-10 pt-2">
-      <TextEditor theme='xcode' onChange={onChange} text={props.code} />
+    <div className="w-full h-full z-10 pt-2 flex-1">
+      <TextEditor onChange={onChange} text={props.code} />
     </div>
   )
 }

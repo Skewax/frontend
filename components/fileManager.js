@@ -46,7 +46,7 @@ export default function FileManager(props) {
 
     if(!auth.currentUser) {
         return(
-            <div className="w-48 bg-gray-100 flex justify-center items-center">
+            <div className="w-56 bg-[#262739] flex justify-center items-center">
                 <button 
                     onClick={signInWithGoogle}
                     className="h-16 w-16 rounded-2xl flex justify-center items-center  flex-col shadow-md bg-white text-blue-500 transform hover:scale-105 transition-all"
@@ -59,9 +59,9 @@ export default function FileManager(props) {
     }
     else {
         return (
-            <div className="w-56 border-r-2">
+            <div className="w-56 border-r-2 border-slate-900 bg-[#262739]">
                 <div className="pl-4 pr-2 py-2 flex justify-between align-center">
-                    <span className="font-bold justify-start">Files</span>
+                    <span className="font-bold justify-start text-slate-200">Files</span>
                     <div className="flex">
                         <button className="file-button">
                             <FaSearch />
@@ -79,8 +79,8 @@ export default function FileManager(props) {
                         (files ? 
                             files.map((file) => 
                                 (
-                                    <button className={"w-full flex justify-start py-2 ".concat((props.activeFile && props.activeFile.name == file.name ? "bg-slate-100 pl-4" : "pl-2"))} onClick={() => openFile(file)} key={file.name}>
-                                        <span className="overflow-ellipsis">{file.name}</span>
+                                    <button className={"w-full flex justify-start py-2 ".concat((props.activeFile && props.activeFile.name == file.name ? "bg-slate-900 pl-4 ml-2 rounded-l-2xl" : "pl-4"))} onClick={() => openFile(file)} key={file.name}>
+                                        <span className="overflow-ellipsis text-slate-200">{file.name}</span>
                                     </button>
                                 )
                             )
