@@ -25,11 +25,18 @@ class Flasher {
             await this.writer.close();
             this.writer = await this.port.writable.getWriter();
         }
+        if(this.reader) {
+            await this.reader.ready;
+            await this.reader.cancel()
+            await this.reader.releaseLock()
+            this.reader = await this.port.readable.getReader()
+        }
     }
 
     async identifyBoard() {
         let data = this.revision.challenge
         for (var i=0; i < data.length; i++) {
+            await this.flush()
             console.log("writing")
             console.log(data.slice(i, i+1))
             await this.writer.write(new Uint8Array(data.slice(i, i+1)))
@@ -47,9 +54,11 @@ class Flasher {
                 }
             }
             if(bytes[1] === this.revision.response[i]){
+                console.log("valid")
             }
             else {
                 console.log("invalid")
+                console.log(bytes)
             }
         }
         await this.writer.write(new Uint8Array([0x00]))
@@ -74,7 +83,7 @@ class Flasher {
         await this.port.setSignals({ break: true })
         await this.port.setSignals({ dataTerminalReady: false })
         await this.port.setSignals({ dataTerminalReady: true })
-        await new Promise(r => setTimeout(r, 60))
+        await new Promise(r => setTimeout(r, 50))
         await this.port.setSignals({ break: false })
         await this.flush()
         return
