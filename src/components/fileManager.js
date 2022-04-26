@@ -41,7 +41,29 @@ export default function FileManager(props) {
                 q: searchTerm
             }).then(function (response) {
                 const parsed = JSON.parse(response.body)
-                setFiles(parsed.files)
+                //going through the response to selectively add files
+                //this way the cache of data and ids of docs are saved on search and update
+                //converting to hashmap by id because its O(a+b) not O(ab)
+                let tempFiles = {}
+                if (files) {
+                    files.forEach((f) => {
+                        const fObj = { ...f }
+                        fObj.shown = false
+                        tempFiles[f.id] = fObj
+                    }) 
+                }
+                parsed.files.forEach((entry) => {
+                   if(!tempFiles[entry.id]){
+                       tempFiles[entry.id] = entry
+                   }
+                   tempFiles[entry.id].shown = true
+                })
+                let listedFiles = []
+                for(const [key, val] of Object.entries(tempFiles)) {
+                    listedFiles.push(val)
+                }
+                console.log(listedFiles)
+                setFiles(listedFiles)
             })
         })
     }
@@ -70,6 +92,10 @@ export default function FileManager(props) {
     }   
 
     useEffect(() => {
+
+    }, [files])
+
+    useEffect(() => {
         if(user) {
             getFiles()
         }
@@ -88,14 +114,19 @@ export default function FileManager(props) {
 
     useEffect(() => {
         if(activeFile) {
+            if(activeFile.cache){
+                props.setCode(activeFile.cache)
+            }
             gapi.client.drive.files.get({
                 fileId: activeFile.id,
                 alt: 'media'
             }).then((response) => {
-                props.setCode(response.body)
+                activeFile.cache = response.body
+                props.setCode(activeFile.cache)
             })
         }
     }, [activeFile])
+
 
 
     //uploading
