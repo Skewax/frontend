@@ -77,12 +77,13 @@ export default function FileManager(props) {
 
     // clicking on files
 
-    const selectFile = (file) => {
+    const selectFile = async (file) => {
         if(activeFile) {
             activeFile.selected = false
+            await updateActiveFile(props.code)
         }
+        file.selected = true
         setActiveFile(file)
-        file.selected = true;
     }
 
     useEffect(() => {
@@ -105,23 +106,24 @@ export default function FileManager(props) {
 
     const debouncedCode = useDebounce(props.code, 1000)
 
-    const updateActiveFile = () => {
+    const updateActiveFile = async (body) => {
         if(activeFile) {
-            const accessToken = gapi.auth.getToken().access_token
-
-            const file = new Blob([props.code], {type: 'text/plain'})
-
-            let xhr = new XMLHttpRequest()
-            xhr.open('PATCH', 'https://www.googleapis.com/upload/drive/v3/files/' + activeFile.id + '/?uploadType=media')
-            xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken)
-            xhr.responseType = 'json'
-            xhr.send()
+            await gapi.client.request({
+                path: '/upload/drive/v3/files/' + activeFile.id,
+                method: 'PATCH',
+                params: {
+                    uploadType: 'media'
+                },
+                body: body
+            })
         }
     }
 
     useEffect(() => {
-        updateActiveFile()
-        props.setAwaitingUpload(false)
+        async function update() {
+            await updateActiveFile(debouncedCode)
+            props.setAwaitingUpload(false)
+        }
     }, [debouncedCode])
 
     return (

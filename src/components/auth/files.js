@@ -9,7 +9,7 @@ const Files = (props) => {
                     props.files.map(file => {
                         return (
                                 <ul 
-                                    onClick={() => props.selectFile(file)} 
+                                    onClick={async () => await props.selectFile(file)} 
                                     className={file.selected ? "bg-slate-100" : "bg-white"}
                                     key={file.id}
                                 >
