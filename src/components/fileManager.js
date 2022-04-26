@@ -80,7 +80,7 @@ export default function FileManager(props) {
     const selectFile = async (file) => {
         if(activeFile) {
             activeFile.selected = false
-            await updateActiveFile(props.code)
+            updateActiveFile(props.code)
         }
         file.selected = true
         setActiveFile(file)
@@ -107,6 +107,7 @@ export default function FileManager(props) {
     const debouncedCode = useDebounce(props.code, 1000)
 
     const updateActiveFile = async (body) => {
+        const constBody = body
         if(activeFile) {
             await gapi.client.request({
                 path: '/upload/drive/v3/files/' + activeFile.id,
@@ -114,7 +115,7 @@ export default function FileManager(props) {
                 params: {
                     uploadType: 'media'
                 },
-                body: body
+                body: constBody
             })
         }
     }
