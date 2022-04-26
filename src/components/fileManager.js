@@ -60,11 +60,20 @@ export default function FileManager(props) {
                 })
                 let listedFiles = []
                 for(const [key, val] of Object.entries(tempFiles)) {
+                    getContentCache(val)
                     listedFiles.push(val)
                 }
-                console.log(listedFiles)
                 setFiles(listedFiles)
             })
+        })
+    }
+
+    const getContentCache = async(f) => {
+        gapi.client.drive.files.get({
+            fileId: f.id,
+            alt: 'media'
+        }).then((response) => {
+            f.cache = response.body
         })
     }
 
@@ -92,10 +101,6 @@ export default function FileManager(props) {
     }   
 
     useEffect(() => {
-
-    }, [files])
-
-    useEffect(() => {
         if(user) {
             getFiles()
         }
@@ -111,6 +116,8 @@ export default function FileManager(props) {
         file.selected = true
         setActiveFile(file)
     }
+
+    
 
     useEffect(() => {
         if(activeFile) {
