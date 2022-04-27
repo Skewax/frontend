@@ -5,11 +5,10 @@ import AceEditor from "react-ace";
 export default function Editor(props) {
 
     return (
-        <div className="flex-grow flex-col h-full">
-            <div className="w-full flex justify-center h-14 items-center">
-                <span className=" font-bold text-2xl text-gray-600">File</span>
+        <div className="flex-grow flex-col h-full relative">
+            <div className="absolute z-50 w-full flex justify-center h-14 items-center">
+                <span className=" font-bold text-2xl text-gray-600">{"hello"}</span>
             </div>
-            <div className="h-full bg-slate-200">
             <AceEditor
                 value={props.code}
                 onChange={props.onChange}
@@ -20,12 +19,17 @@ export default function Editor(props) {
                 fontSize={16}
                 showPrintMargin={false}
                 width="100%"
-                height="inherit"
+                style={{
+                    position: 'relvative',
+                    
+                }}
+                onLoad={function(editor){ editor.renderer.setPadding(56); editor.renderer.setScrollMargin(56); }}
+                height='100%'
                 showGutter={true}
                 highlightActiveLine={false}
                 focus={true}
+                className="flex-grow"
             />
-            </div>
         </div>
     )
 };

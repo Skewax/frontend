@@ -33,8 +33,8 @@ export default function FileManager(props) {
 
 
 
-    const getFiles = (searchTerm = null) => {
-        gapi.client.load('drive', 'v3', () => {
+    const getFiles = async (searchTerm = null) => {
+        await gapi.client.load('drive', 'v3', () => {
             gapi.client.drive.files.list({
                 spaces: 'appDataFolder',
                 pageSize: 100,
@@ -64,7 +64,17 @@ export default function FileManager(props) {
                     getContentCache(val)
                     listedFiles.push(val)
                 }
+                listedFiles.sort(function compareFn(a, b) { 
+                    if(a.name.toUpperCase() > b.name.toUpperCase()) {
+                        return 1
+                    } 
+                    if(a.name.toUpperCase() < b.name.toUpperCase()) {
+                        return -1
+                    }
+                    return 0
+                })
                 setFiles(listedFiles)
+                
             })
         })
     }
@@ -190,10 +200,10 @@ export default function FileManager(props) {
     }, [])
 
     return (
-        <div className="w-56 h-full bg-primary">
+        <div className="w-56 h-full bg-primary flex flex-col ">
             <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className="m-3 ml-4"/>
             {(user ? 
-                <div className="">
+                <div className="h-full flex flex-col">
                     {user.imageUrl ? 
                     <div className="relative pt-3" onClick={() => setAccountContext(true)} ref={ref}>
                         <div className="px-5 absolute  flex items-center cursor-pointer">
@@ -206,13 +216,13 @@ export default function FileManager(props) {
                             </span>
                         </div>
                         <div 
-                            className={`absolute top-12 w-full p-5 flex justify-center ${accountContext ? "" : "hidden"}`}
+                            className={`absolute top-12 w-full p-5 flex justify-center transform transition-all ${accountContext ? "scale-100" : "scale-0"}`}
                         >
                             <button 
-                                className="bg-slate-50 w-40 rounded-xl flex justify-center items-center h-10 shadow-md"
+                                className="bg-white w-40 rounded-md flex justify-center items-center h-10 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.3)]"
                                 onClick={signOut}
                             >
-                                <span className="font-bold text-slate-600">Sign Out</span>
+                                <span className="text-slate-600">Sign Out</span>
                             </button>
                         </div>
                     </div>
@@ -222,6 +232,8 @@ export default function FileManager(props) {
                     <Files 
                         files={files}
                         selectFile={selectFile}
+                        createFile={createFile}
+                        getFiles={getFiles}
                     />
                 </div> 
                 :
