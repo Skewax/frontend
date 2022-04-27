@@ -24,7 +24,19 @@ code {
   background: #FFFFFF !important;
 }
 
+@layer components {
+  .bg-primary {
+    @apply bg-white dark:bg-slate-800;
+  }
+  .bg-secondary {
+    @apply bg-slate-100 dark:bg-slate-900;
+  }
+  .select {
+    @apply dark:text-slate-400 bg-slate-100 dark:bg-slate-700;
+  }
 
+  
+}
 
 @tailwind base;
 @tailwind components;

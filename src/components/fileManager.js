@@ -1,10 +1,10 @@
 import {
     useState,
-    useEffect
+    useEffect,
+    useRef
 } from "react"
 import { gapi } from 'gapi-script'
 import LoginButton from './auth/login'
-import LogoutButton from './auth/logout'
 import Files from './auth/files'
 import useDebounce from './useDebounce'
 
@@ -18,6 +18,7 @@ export default function FileManager(props) {
     const [user, setUser] = useState(false)
     const [files, setFiles] = useState(false)
     const [activeFile, setActiveFile] = useState(false)
+    const [accountContext, setAccountContext] = useState(false)
 
     useEffect(() => {
         function start() {
@@ -101,6 +102,7 @@ export default function FileManager(props) {
     }   
 
     useEffect(() => {
+        setAccountContext(false)
         if(user) {
             getFiles()
         }
@@ -165,17 +167,63 @@ export default function FileManager(props) {
         }
     }, [debouncedCode])
 
+    const signOut = () => {
+        const auth2 = gapi.auth2.getAuthInstance() 
+        if(auth2 != null) {
+            auth2.signOut().then(auth2.disconnect().then(setUser(false)))
+        }
+    }
+
+    const ref = useRef(null)
+
+    const handleClickOutsideAccount = (event) => {
+        if(ref.current && !ref.current.contains(event.target)) {
+            setAccountContext(false)
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutsideAccount, true)
+        return () => {
+            document.removeEventListener('click', handleClickOutsideAccount, true)
+        }
+    }, [])
+
     return (
-        <div className="w-56 h-full">
+        <div className="w-56 h-full bg-primary">
+            <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className="m-3 ml-4"/>
             {(user ? 
-                <>
-                    <button onClick={() => createFile("test", "appDataFolder")}>Create</button>
+                <div className="">
+                    {user.imageUrl ? 
+                    <div className="relative pt-3" onClick={() => setAccountContext(true)} ref={ref}>
+                        <div className="px-5 absolute  flex items-center cursor-pointer">
+                            <img src={user.imageUrl} alt={"icon"} 
+                                className="rounded-full"
+                                width={40}
+                            /> 
+                            <span className="ml-4 text-l select-none">
+                                Signed in as: <br />  {user.name}
+                            </span>
+                        </div>
+                        <div 
+                            className={`absolute top-12 w-full p-5 flex justify-center ${accountContext ? "" : "hidden"}`}
+                        >
+                            <button 
+                                className="bg-slate-50 w-40 rounded-xl flex justify-center items-center h-10 shadow-md"
+                                onClick={signOut}
+                            >
+                                <span className="font-bold text-slate-600">Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
+                        : <></>
+                    }
+                    {/* <button onClick={() => createFile("test", "appDataFolder")}>Create</button> */}
                     <Files 
                         files={files}
                         selectFile={selectFile}
                     />
-                    <LogoutButton setUser={setUser} />
-                </> 
+                </div> 
                 :
                 <div className="flex justify-center items-center h-full">
                     <LoginButton setUser={setUser} />

@@ -1,19 +1,25 @@
 import { useEffect, useState } from 'react'
 
+import { BsFileEarmarkText } from 'react-icons/bs'
+
 const Files = (props) => {
 
     if(props.files) {
         return (
-            <div>
+            <div className="pt-20">
                 {
                     props.files.map(file => {
                         return (
                                 <ul 
                                     onClick={async () => await props.selectFile(file)} 
-                                    className={file.selected ? "bg-slate-100" : "bg-white"}
+                                    className={`pl-3 py-1 cursor-pointer hover:select flex items-center text ${file.selected ? "select" : "text-slate-600"}`}
                                     key={file.id}
                                 >
-                                    {file.name}
+                                    <BsFileEarmarkText 
+                                        size={15}
+                                        className="mt-[1px]"
+                                    />
+                                    <span className='pl-2'>{file.name}</span>
                                 </ul>
                         )
                     })
