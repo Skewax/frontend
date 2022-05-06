@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "ace-builds": "^1.4.14",
     "gapi-script": "^1.2.0",
+    "pbasic-tokenizer": "^0.3.0",
     "react": "^18.0.0",
     "react-ace": "^9.5.0",
     "react-contexify": "^5.0.0",
@@ -17,6 +18,7 @@
     "react-icons": "^4.3.1",
     "react-responsive": "^9.0.0-beta.6",
     "react-scripts": "5.0.0",
+    "serve": "^13.0.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

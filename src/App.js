@@ -13,6 +13,7 @@ function App() {
   const [awaitingUpload, setAwaitingUpload] = useState(false)
   const [theme, setTheme] = useState(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
+  const [fileName, setFileName] = useState('Untitled')
   const systemPrefersDark = useMediaQuery(
     {
       query: '(prefers-color-scheme: dark)',
@@ -28,12 +29,17 @@ function App() {
         setCode={setCode}
         setAwaitingUpload={setAwaitingUpload}
         theme={theme}
+        setFileName={setFileName}
       />
       <Editor 
         code={code}
         onChange={setCode}
+        fileName={fileName}
+        loading={awaitingUpload}
+        theme={theme}
       />
       <Sidebar 
+        code={code}
       />
     </div>
   );

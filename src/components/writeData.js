@@ -1,5 +1,3 @@
-import { MdTransferWithinAStation } from "react-icons/md";
-
 class Flasher {
     constructor(port) {
         
@@ -10,7 +8,7 @@ class Flasher {
         this.writer = port.writable.getWriter()
         this.reader = port.readable.getReader()
         this.port = port;
-      //  this.reader = port.readable.getReader()
+        //this.reader = port.readable.getReader()
 
         // revisions
         this.revision = {
@@ -67,7 +65,7 @@ class Flasher {
         while(bytesRead < 1) {
             const val = await this.reader.read()
             if(val) {
-                for(var j = 0; j < val.value.length; j++){
+                for(j = 0; j < val.value.length; j++){
                     if(val.value[j]){
                         bytes.push(val.value[j])
                         bytesRead++
