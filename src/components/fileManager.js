@@ -33,7 +33,7 @@ export default function FileManager(props) {
 
 
 
-    const getFiles = async (searchTerm = null) => {
+    const getFiles = async (searchTerm = null, callback = null) => {
         await gapi.client.load('drive', 'v3', () => {
             gapi.client.drive.files.list({
                 spaces: 'appDataFolder',
@@ -73,8 +73,7 @@ export default function FileManager(props) {
                     }
                     return 0
                 })
-                setFiles(listedFiles)
-                
+                setFiles(listedFiles, callback)
             })
         })
     }
@@ -106,10 +105,44 @@ export default function FileManager(props) {
         xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken)
         xhr.responseType = 'json'
         xhr.onload = () => {
-            getFiles()
+            getFiles(null, function() {
+                selectFile(files.find(obj => obj.id === xhr.id))
+            })
         }
         xhr.send(form)
     }   
+
+    const deleteFile = (file) => {
+        gapi.client.drive.files.delete({
+            fileId: file.id
+        }).then(function (res) {
+            if(res.status >= 200 && res.status <= 300) {
+                let tempFiles = [ ...files]
+                for( var i = 0; i < tempFiles.length; i++){ 
+                                   
+                    if ( tempFiles[i].id === file.id) { 
+                        tempFiles.splice(i, 1); 
+                        i--; 
+                    }
+                }
+                setFiles(tempFiles)
+            }
+        })
+    }
+
+    const renameFile = (file, newName) => {
+        file.name = newName
+        gapi.client.drive.files.update({
+            fileId: file.id,
+            resource: {
+                name: newName
+            }
+        }).then((res) => {
+            if(res.status >= 200 && res.status <= 300) {
+            }
+        })
+        setFiles([ ...files])
+    }
 
     useEffect(() => {
         setAccountContext(false)
@@ -122,11 +155,14 @@ export default function FileManager(props) {
 
     const selectFile = async (file) => {
         if(activeFile) {
-            activeFile.selected = false
+            files.forEach((file) => {
+                file.selected = false
+            })
             updateActiveFile(props.code)
         }
         file.selected = true
         setActiveFile(file)
+        props.setFileName(file.name)
     }
 
     
@@ -142,6 +178,7 @@ export default function FileManager(props) {
             }).then((response) => {
                 activeFile.cache = response.body
                 props.setCode(activeFile.cache)
+                props.setAwaitingUpload(false)
             })
         }
     }, [activeFile])
@@ -157,7 +194,9 @@ export default function FileManager(props) {
     const debouncedCode = useDebounce(props.code, 1000)
 
     const updateActiveFile = async (body) => {
+        props.setAwaitingUpload(true)
         const constBody = body
+        let fileRef = activeFile
         if(activeFile) {
             await gapi.client.request({
                 path: '/upload/drive/v3/files/' + activeFile.id,
@@ -166,6 +205,11 @@ export default function FileManager(props) {
                     uploadType: 'media'
                 },
                 body: constBody
+            }).then((response) => {
+                if (response.status === 200) {
+                    fileRef.cache = body
+                    props.setAwaitingUpload(false)
+                }
             })
         }
     }
@@ -173,8 +217,8 @@ export default function FileManager(props) {
     useEffect(() => {
         async function update() {
             await updateActiveFile(debouncedCode)
-            props.setAwaitingUpload(false)
         }
+        update()
     }, [debouncedCode])
 
     const signOut = () => {
@@ -207,11 +251,11 @@ export default function FileManager(props) {
                     {user.imageUrl ? 
                     <div className="relative pt-3" onClick={() => setAccountContext(true)} ref={ref}>
                         <div className="px-5 absolute  flex items-center cursor-pointer">
-                            <img src={user.imageUrl} alt={"icon"} 
+                            <img src={user.imageUrl} referrerPolicy="no-referrer" alt={"icon"} 
                                 className="rounded-full"
                                 width={40}
                             /> 
-                            <span className="ml-4 text-l select-none">
+                            <span className="ml-4 text-l select-none dark:text-slate-100">
                                 Signed in as: <br />  {user.name}
                             </span>
                         </div>
@@ -234,6 +278,8 @@ export default function FileManager(props) {
                         selectFile={selectFile}
                         createFile={createFile}
                         getFiles={getFiles}
+                        deleteFile={deleteFile}
+                        renameFile={renameFile}
                     />
                 </div> 
                 :

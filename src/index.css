@@ -20,19 +20,20 @@ code {
   background-color: #FFFFFF !important;
 }
 
-.ace_editor{
+/* .ace_editor (prefers-color-scheme: {
   background: #FFFFFF !important;
-}
+} */
+
 
 @layer components {
   .bg-primary {
-    @apply bg-white dark:bg-slate-800;
+    @apply bg-white dark:bg-zinc-800;
   }
   .bg-secondary {
-    @apply bg-slate-100 dark:bg-slate-900;
+    @apply bg-slate-100 dark:bg-zinc-900;
   }
   .select {
-    @apply dark:text-slate-400 bg-slate-100 dark:bg-slate-700;
+    @apply dark:text-zinc-300 bg-slate-100 dark:bg-zinc-700;
   }
 
   

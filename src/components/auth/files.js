@@ -10,17 +10,56 @@ import {
 import "react-contexify/dist/ReactContexify.css";
 
 const File = (props) => {
-
     const { show } = useContextMenu({id: props.id})
 
     function displayMenu(e) {
         show(e)
     }
 
-    return (
+    const [ editing, setEditing ] = useState(false)
+    const editFile = () => {
+        setEditing(props.text)
+    }
+    
+
+    function keydown(e) {
+        if(e.keyCode === 27) {
+            e.preventDefault()
+            setEditing(false)
+        }
+        if(e.keyCode === 13) {
+            props.renameFile(editing)
+            setEditing(false)
+        }
+    }
+
+    if(editing !== false) {
+        return (
+            <>
+                <div 
+                    className={"pl-3 py-1 flex  items-center text text-slate-600 dark:text-slate-500"}
+                    id={props.id}
+                >
+                    <BsFileEarmarkText 
+                        size={15}
+                        className="mt-[1px]"
+                    />
+                    <input 
+                        value={editing}
+                        onChange={(e) => setEditing(e.target.value)}
+                        autoFocus
+                        onBlur={() => setEditing(false)}
+                        onKeyDown={keydown}
+                        className="pl-2"
+                    />
+                </div>
+            </>
+        )
+    }
+    else return (
         <>
             <div 
-                className={`pl-3 py-1 cursor-pointer hover:select flex items-center text ${props.selected ? "select" : "text-slate-600"}`}
+                className={`pl-3 py-1 cursor-pointer hover:select flex items-center text ${props.selected ? "select" : "text-slate-500"}`}
                 onClick={props.onClick}
                 onContextMenu={displayMenu}
                 id={props.id}
@@ -35,10 +74,10 @@ const File = (props) => {
                 <Item onClick={props.newFilePopup}>
                     Create New File
                 </Item>
-                <Item>
+                <Item onClick={editFile}>
                     Rename "{props.text}"
                 </Item>
-                <Item>
+                <Item onClick={props.deleteFile}>
                     Delete "{props.text}"
                 </Item>
             </Menu>
@@ -96,6 +135,8 @@ const Files = (props) => {
                                         key={file.id}
                                         id={file.id}
                                         createFile={props.createFile}
+                                        deleteFile={() => {props.deleteFile(file)}}
+                                        renameFile={(name) => {props.renameFile(file, name)}}
                                     />
                             )
                         })
