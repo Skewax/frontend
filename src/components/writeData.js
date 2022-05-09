@@ -1,3 +1,5 @@
+import {Buffer} from 'buffer';
+
 class Flasher {
     constructor(port) {
         
@@ -35,8 +37,6 @@ class Flasher {
         let data = this.revision.challenge
         for (var i=0; i < data.length; i++) {
             await this.flush()
-            console.log("writing")
-            console.log(data.slice(i, i+1))
             await this.writer.write(new Uint8Array(data.slice(i, i+1)))
             let bytesRead = 0
             let bytes = []
@@ -51,13 +51,13 @@ class Flasher {
                     }
                 }
             }
-            if(bytes[1] === this.revision.response[i]){
-                console.log("valid")
-            }
-            else {
-                console.log("invalid")
-                console.log(bytes)
-            }
+            // if(bytes[1] === this.revision.response[i]){
+            //     console.log("valid")
+            // }
+            // else {
+            //     console.log("invalid")
+            //     console.log(bytes)
+            // }
         }
         await this.writer.write(new Uint8Array([0x00]))
         let bytesRead = 0
@@ -73,7 +73,6 @@ class Flasher {
                 }
             }
         }
-        console.log(bytes)
         return  
     }
 
@@ -91,8 +90,6 @@ class Flasher {
         for(let i = 0; i < this.pb.PacketCount; i++) {
             let packet = this.pb.PacketBuffer.slice(i*18, i*18+18)
             await this.writer.write(Buffer.from(packet))
-            console.log("sending")
-            console.log(packet)
             let bytesRead = 0
             let bytes = []
             while(bytesRead < 19) {
@@ -104,8 +101,6 @@ class Flasher {
                     }
                 }
             }
-            console.log("received")
-            console.log(bytes)
         }
     }
 

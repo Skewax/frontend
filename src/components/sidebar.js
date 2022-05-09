@@ -56,6 +56,12 @@ export default function Sidebar(props) {
         awaitOpen()
     }, [port])
 
+    //log all accessControl changes
+    useEffect(() => {
+        console.log(accessControl)
+    }, [accessControl])
+    
+
     if(serial) {
         if(port){
             return (

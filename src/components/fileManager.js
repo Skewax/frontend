@@ -60,7 +60,7 @@ export default function FileManager(props) {
                    tempFiles[entry.id].shown = true
                 })
                 let listedFiles = []
-                for(const [key, val] of Object.entries(tempFiles)) {
+                for(const [, val] of Object.entries(tempFiles)) {
                     getContentCache(val)
                     listedFiles.push(val)
                 }
