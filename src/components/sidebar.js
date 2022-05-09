@@ -57,10 +57,10 @@ export default function Sidebar(props) {
     }, [port])
 
     //log all accessControl changes
-    useEffect(() => {
-        console.log(accessControl)
-    }, [accessControl])
-    
+    // useEffect(() => {
+    //     console.log(accessControl)
+    // }, [accessControl])
+
 
     if(serial) {
         if(port){
