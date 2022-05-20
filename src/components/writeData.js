@@ -86,6 +86,13 @@ class Flasher {
         return
     }
 
+    async cancel() {
+        await this.reader.cancel()
+        await this.reader.releaseLock()
+        await this.writer.close()
+        await this.writer.releaseLock()
+    }
+
     async upload() {
         for(let i = 0; i < this.pb.PacketCount; i++) {
             let packet = this.pb.PacketBuffer.slice(i*18, i*18+18)

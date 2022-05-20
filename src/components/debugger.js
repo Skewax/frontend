@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react"
+import { FaPlay, FaStopCircle } from "react-icons/fa"
 
-
-
-export default function Debugger(props) {
+export function Debugger(props) {
     const [running, setRunning] = useState(false)
     const [debugText, setDebugText] = useState("")
     const [reader, setReader] = useState(false)
@@ -68,6 +67,40 @@ export default function Debugger(props) {
                 return <span key={index+"debugTerminalLine"}>{'> '}{line}</span>
             })}
             </div>
+        </div>
+    )
+}
+
+
+
+export function DebugController(props) {
+
+    return (
+        <div className="">
+            {
+                (props.accessControl === 0 ? 
+                    <button 
+                        className="flex items-center"
+                        onClick={() => props.setAccessControl(4)}
+                    >
+                        <FaPlay className="text-green-400 mr-2"/> Listen to Debug Terminal
+                    </button>
+                : (props.accessControl === 2 ? 
+                        <span className="flex items-center">
+                            <FaPlay className="text-grey-200 mr-2"/> Waiting...
+                        </span>
+                : (props.accessControl === 4 || props.accessControl === 5 ?
+                        <button 
+                            className="flex items-center"
+                            onClick={() => props.setAccessControl(5)}
+                        >
+                            <FaStopCircle className="mt-[0.6px] text-red-400 mr-2"/> Stop Listening
+                        </button> :
+                        <span className="flex items-center">
+                            <FaPlay className="text-grey-200 mr-2"/> Compiling...
+                        </span>
+                )))
+            }
         </div>
     )
 }

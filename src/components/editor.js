@@ -13,6 +13,15 @@ export default function Editor(props) {
 
     }, [props.theme])
 
+    if(props.code === false){
+        return (
+            <div className="flex-grow flex-col h-full relative">
+                <div className="w-full flex items-center justify-center h-full">
+                    <span>Sign In and Select a File</span>
+                </div>
+            </div>
+        )
+    }
     return (
         <div className="flex-grow flex-col h-full relative">
             <div className="absolute z-50 w-full flex justify-center h-14 items-center">

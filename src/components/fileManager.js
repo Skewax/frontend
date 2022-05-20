@@ -7,6 +7,7 @@ import { gapi } from 'gapi-script'
 import LoginButton from './auth/login'
 import Files from './auth/files'
 import useDebounce from './useDebounce'
+import { useCookies } from "react-cookie";
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID
 const API_KEY = process.env.REACT_APP_GOOGLE_DRIVE_API_KEY
@@ -15,10 +16,13 @@ const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.google
 
 export default function FileManager(props) {
 
+    const [cookies, setCookie] = useCookies(['selectedFile'])
     const [user, setUser] = useState(false)
     const [files, setFiles] = useState(false)
     const [activeFile, setActiveFile] = useState(false)
     const [accountContext, setAccountContext] = useState(false)
+    const [loadedDefault, setLoadedDefault] = useState(false)
+
 
     useEffect(() => {
         function start() {
@@ -151,6 +155,17 @@ export default function FileManager(props) {
         }
     }, [user])
 
+    useEffect(() => {
+        if(files) {
+            if(cookies.selectedFile) {
+                selectFile(files.find(obj => obj.id === cookies.selectedFile))
+            } else {
+                selectFile(files[0])
+            }
+        }
+    }, [files])
+    
+
     // clicking on files
 
     const selectFile = async (file) => {
@@ -169,6 +184,7 @@ export default function FileManager(props) {
 
     useEffect(() => {
         if(activeFile) {
+            setCookie('selectedFile', activeFile.id)
             if(activeFile.cache){
                 props.setCode(activeFile.cache)
             }

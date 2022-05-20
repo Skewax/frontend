@@ -4,7 +4,7 @@ import {
     useMemo
 } from "react"
 import Compiler from "./compiler"
-import Debugger from "./debugger"
+import { Debugger, DebugController } from "./debugger"
 
 export default function Sidebar(props) {
 
@@ -42,6 +42,7 @@ export default function Sidebar(props) {
             alert("Skewax is currently using the port. Make sure to turn off the debug terminal and finish compiling before disconnecting from the device")
         }
         else {
+            console.log("port closed")
             await port.close()
             setPort(0)
         }
@@ -51,8 +52,13 @@ export default function Sidebar(props) {
         async function awaitOpen() {
             if (port !== 0 && !port.readable && !port.writable) {
                 await port.open({baudRate: 9600})
+                console.log(port)
+                if(port.readable === null) {
+                    alert("could not open port")
+                    setPort(0)
+                }
             }
-        }
+        }   
         awaitOpen()
     }, [port])
 
@@ -74,8 +80,10 @@ export default function Sidebar(props) {
                             Disconnect...
                         </button>
                     </div>
-                    <button onClick={() => setAccessControl(4)} className="w-full text-slate-500 border-b">Listen to Debug</button>
-                    <button onClick={() => setAccessControl(5)} className="w-full text-slate-500 border-b">Stop Debug</button>
+                    <DebugController 
+                        setAccessControl={setAccessControl}
+                        accessControl={accessControl}
+                    />
                     <Compiler 
                         port={port}
                         accessControl={accessControl}

@@ -20,16 +20,25 @@ export default function Compiler(props) {
     }
 
     async function doCompile() {
+        console.log("compiling...")
         const compiled = pbasic.compile(props.code, false)
+        console.log(compiled)
         if(compiled.error) {
             //toast error 
             console.log(compiled.error)
             endCompile()
-
         }
         else {
+
             const flasher = new Flasher(props.port) 
-            await flasher.flash(compiled)
+            console.log("toFlash")
+            await new Promise(resolve => {
+                flasher.flash(compiled)
+                setTimeout(async() => {
+                    await flasher.cancel()
+                }, 3000)
+            })
+            console.log("compiled")
             endCompile()
         }
     }

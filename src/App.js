@@ -9,7 +9,7 @@ import { useMediaQuery } from 'react-responsive';
 
 function App() {
 
-  const [code, setCode] = useState('')
+  const [code, setCode] = useState(false)
   const [awaitingUpload, setAwaitingUpload] = useState(false)
   const [theme, setTheme] = useState(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
