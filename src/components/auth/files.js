@@ -124,7 +124,7 @@ const Files = (props) => {
                     id={"FileManager"}
                 >
                     {
-                        props.files.map(file => {
+                        (props.files.length > 0 ? props.files.map(file => {
                             return (
                                     <File 
                                         onClick={async () => await props.selectFile(file)} 
@@ -137,7 +137,7 @@ const Files = (props) => {
                                         renameFile={(name) => {props.renameFile(file, name)}}
                                     />
                             )
-                        })
+                        }) : <div className="text-center text-slate-500">Right Click To Create a File</div>)
                     }{
                         (newFile === false ? 
                             <>
