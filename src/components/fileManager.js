@@ -15,7 +15,7 @@ const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.google
 
 
 export default function FileManager(props) {
-
+    const [fileCache, setFileCache] = useState(false)
     const [cookies, setCookie] = useCookies(['selectedFile'])
     const [user, setUser] = useState(false)
     const [files, setFiles] = useState(false)
@@ -37,7 +37,7 @@ export default function FileManager(props) {
 
 
 
-    const getFiles = async (searchTerm = null, callback = null) => {
+    const getFiles = async (searchTerm = null) => {
         await gapi.client.load('drive', 'v3', () => {
             gapi.client.drive.files.list({
                 spaces: 'appDataFolder',
@@ -77,7 +77,7 @@ export default function FileManager(props) {
                     }
                     return 0
                 })
-                setFiles(listedFiles, callback)
+                setFiles(listedFiles)
             })
         })
     }
@@ -108,10 +108,9 @@ export default function FileManager(props) {
         xhr.open('post', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id')
         xhr.setRequestHeader('Authorization', 'Bearer ' + accessToken)
         xhr.responseType = 'json'
-        xhr.onload = () => {
-            getFiles(null, function() {
-                selectFile(files.find(obj => obj.id === xhr.id))
-            })
+        xhr.onload = (event) => {
+            setFileCache(event.target.response.id)
+            getFiles(null)
         }
         xhr.send(form)
     }   
@@ -122,15 +121,17 @@ export default function FileManager(props) {
         }).then(function (res) {
             if(res.status >= 200 && res.status <= 300) {
                 let tempFiles = [ ...files]
+                let pos = 0
                 for( var i = 0; i < tempFiles.length; i++){ 
                                    
                     if ( tempFiles[i].id === file.id) { 
                         tempFiles.splice(i, 1); 
+                        pos = i
                         i--; 
                     }
                 }
                 setFiles(tempFiles)
-                setActiveFile(false)
+                selectFile(tempFiles[Math.min(pos, tempFiles.length - 1)])
             }
         })
     }
@@ -158,12 +159,26 @@ export default function FileManager(props) {
 
     useEffect(() => {
         if(files) {
-            if(cookies.selectedFile) {
-                selectFile(files.find(obj => obj.id === cookies.selectedFile))
-            } else {
-                selectFile(files[0])
+            if(fileCache) {
+                const temp = files.find(obj => obj.id === fileCache)
+                if(temp) {
+                    selectFile(temp)
+                }
+                setFileCache(false)
             }
-        }
+            else if(activeFile === false) {
+                if(cookies.selectedFile) {
+                    const temp = files.find(obj => obj.id === cookies.selectedFile)
+                    if(temp) {
+                        setActiveFile(temp)
+                    } else {
+                        selectFile(files[0])
+                    }
+                } else {
+                    selectFile(files[0])
+                }
+            }
+        }   
     }, [files])
 
 
@@ -289,7 +304,6 @@ export default function FileManager(props) {
                     </div>
                         : <></>
                     }
-                    {/* <button onClick={() => createFile("test", "appDataFolder")}>Create</button> */}
                     <Files 
                         files={files}
                         selectFile={selectFile}
