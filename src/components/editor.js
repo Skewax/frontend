@@ -48,10 +48,6 @@ export default function Editor(props) {
                 fontSize={16}
                 showPrintMargin={false}
                 width="100%"
-                style={{
-                    position: 'relvative',
-                    
-                }}
                 onLoad={function(editor){ editor.renderer.setPadding(56); editor.renderer.setScrollMargin(56); }}
                 height='100%'
                 showGutter={true}

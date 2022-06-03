@@ -21,7 +21,6 @@ export default function FileManager(props) {
     const [files, setFiles] = useState(false)
     const [activeFile, setActiveFile] = useState(false)
     const [accountContext, setAccountContext] = useState(false)
-    const [loadedDefault, setLoadedDefault] = useState(false)
 
 
     useEffect(() => {

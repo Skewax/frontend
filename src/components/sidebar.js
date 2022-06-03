@@ -5,7 +5,6 @@ import {
 } from "react"
 import Compiler from "./compiler"
 import { Debugger, DebugController } from "./debugger"
-
 export default function Sidebar(props) {
 
     const serial = useMemo(() => hasSerial(), [])
@@ -72,6 +71,7 @@ export default function Sidebar(props) {
         if(port){
             return (
                 <div className="p-2 w-80 border-l border-slate-100 flex items-start flex-col">
+                    
                     <div className="w-full flex justify-center">
                         <button
                             onClick={disconnect}

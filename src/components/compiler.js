@@ -1,6 +1,7 @@
 import { useEffect, useState} from "react"
 import Flasher from "./writeData"
 import pbasic from "pbasic-tokenizer"
+import { toast } from "react-toastify"
 
 export default function Compiler(props) {
 
@@ -19,27 +20,54 @@ export default function Compiler(props) {
             props.setAccessControl(2)
     }
 
+
     async function doCompile() {
-        console.log("compiling...")
         const compiled = pbasic.compile(props.code, false)
         console.log(compiled)
-        if(compiled.error) {
-            //toast error 
-            console.log(compiled.error)
-            endCompile()
-        }
-        else {
-
+        if(compiled.Succeeded === true) {
             const flasher = new Flasher(props.port) 
-            console.log("toFlash")
-            await new Promise(resolve => {
-                flasher.flash(compiled)
-                setTimeout(async() => {
-                    await flasher.cancel()
+            let flashPromise = new Promise((resolve, reject) => {
+                flasher.flash(compiled).then(() => {
+                    resolve()
+                })
+            })
+            let timeout = new Promise((resolve, reject) => {
+                let id = setTimeout(async() => {
+                    clearTimeout(id)
+                        reject()
                 }, 3000)
             })
-            console.log("compiled")
-            endCompile()
+            let race = Promise.race([flashPromise, timeout])
+            race.then(() => {
+                endCompile()
+            })
+            race.catch(async error => {
+                toast.error(`Compiler Timed Out. Make sure the stamp is on and plugged in.`, {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                await flasher.cancel()
+                props.setAccessControl(0)
+            })
+            
+        }
+        else {
+            toast.error(`Error, ${compiled.Error.message}`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            props.setAccessControl(0)
+            
         }
     }
 

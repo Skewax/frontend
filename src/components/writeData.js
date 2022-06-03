@@ -119,7 +119,8 @@ class Flasher {
         await this.upload()
         await this.writer.write(new Uint8Array([0x00]))
         await this.writer.releaseLock()
-        await this.reader.releaseLock()      
+        await this.reader.releaseLock() 
+        return
     }
 
 
