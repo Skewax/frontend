@@ -169,7 +169,7 @@ export default function FileManager(props) {
                 if(cookies.selectedFile) {
                     const temp = files.find(obj => obj.id === cookies.selectedFile)
                     if(temp) {
-                        setActiveFile(temp)
+                        selectFile(temp)
                     } else {
                         selectFile(files[0])
                     }

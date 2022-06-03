@@ -2,7 +2,8 @@ import { useEffect, useState} from "react"
 import Flasher from "./writeData"
 import pbasic from "pbasic-tokenizer"
 import { toast } from "react-toastify"
-
+import { FaHammer } from "react-icons/fa"
+import { ImSpinner2 } from "react-icons/im"
 export default function Compiler(props) {
 
     const [running, setRunning] = useState(false)
@@ -95,8 +96,17 @@ export default function Compiler(props) {
     }, [running])
 
     return ( 
-        <div>
-            <button onClick={beginCompile}>compile</button>
+        <div className="w-full flex justify-center">
+            
+            <div
+                onClick={beginCompile} 
+                className="bg-sky-600 rounded-lg w-44 text-white font-bold h-10 text-xl flex items-center cursor-pointer"
+            >
+                {props.accessControl === 3 ? <ImSpinner2 className="text-white pl-4 origin-[70%_50%] animate-spin "  size={40}/>: <FaHammer className="text-white pl-4" size={38}/>}
+                
+                <div className="flex-grow"></div>
+                <span className={props.accessControl === 3 ? 'pr-2': 'pr-8'}>{props.accessControl === 3 ? 'Compiling...' : 'Compile'}</span>
+            </div>
         </div>
     )
 }

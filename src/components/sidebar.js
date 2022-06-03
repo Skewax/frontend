@@ -118,22 +118,22 @@ export default function Sidebar(props) {
     if(serial) {
         if(port){
             return (
-                <div className="p-2 w-80 border-l border-slate-100 flex items-start flex-col">
+                <div className="p-2 w-80 border-l border-slate-100 flex items-start flex-col ">
                     
                     <div className="w-full flex justify-center">
-                        <span>
-                            {port.manufacturer}
+                        <span className="font-bold text-slate-400">
+                            Connected
                         </span>
                     </div>
-                    <DebugController 
-                        setAccessControl={setAccessControl}
-                        accessControl={accessControl}
-                    />
                     <Compiler 
                         port={port}
                         accessControl={accessControl}
                         setAccessControl={setAccessControl}    
                         code={props.code}
+                    />
+                     <DebugController 
+                        setAccessControl={setAccessControl}
+                        accessControl={accessControl}
                     />
                     <Debugger 
                         port={port}
