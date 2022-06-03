@@ -15,6 +15,45 @@ export default function Sidebar(props) {
         return false
     }
 
+    useEffect(() => {
+        async function handleUsbConnect(event) {
+            console.log("connecting")
+            console.log(port)
+            console.log("donePort")
+            try{
+                const reader = await port.readable.getReader()
+                await reader.releaseLock()
+            }
+            catch(error) {
+                try {
+                    if(port) {
+                        port.close()
+                    }
+                    const ports = await navigator.serial.getPorts()
+                    setPort(ports[0])
+            }
+                catch(error) {
+                    console.log(error)
+                }
+            }
+            if(!port) {
+                const ports = await navigator.serial.getPorts()
+                console.log(ports)
+            }
+        }
+        async function handleUsbDisconnect(event) {
+            await port.close()
+            setPort(false)
+        }
+        navigator.serial.addEventListener('connect', handleUsbConnect)
+        navigator.serial.addEventListener('disconnect', handleUsbDisconnect)
+        return () => {
+            navigator.serial.removeEventListener('connect', handleUsbConnect)
+            navigator.serial.removeEventListener('disconnect', handleUsbDisconnect)
+        }
+    })
+
+
 
     //access state controller key
     //0: currently not in use, open to anyone
@@ -66,6 +105,15 @@ export default function Sidebar(props) {
     //     console.log(accessControl)
     // }, [accessControl])
 
+    async function tryAutoConnect() {
+        try {
+            const ports = await navigator.serial.getPorts()
+            setPort(ports[0])
+        }
+        catch(error) {
+            console.log(error)
+        }
+    }
 
     if(serial) {
         if(port){
@@ -73,12 +121,9 @@ export default function Sidebar(props) {
                 <div className="p-2 w-80 border-l border-slate-100 flex items-start flex-col">
                     
                     <div className="w-full flex justify-center">
-                        <button
-                            onClick={disconnect}
-                            className="text-slate-500 underline"
-                        >
-                            Disconnect...
-                        </button>
+                        <span>
+                            {port.manufacturer}
+                        </span>
                     </div>
                     <DebugController 
                         setAccessControl={setAccessControl}
@@ -99,6 +144,7 @@ export default function Sidebar(props) {
             )
         }
         else {
+            tryAutoConnect()
             return (
                 <div className="w-80 border-l border-slate-100 flex justify-center items-center">
                     <button

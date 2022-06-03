@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { FaPlay, FaStopCircle } from "react-icons/fa"
-
+import { toast } from 'react-toastify'
 export function Debugger(props) {
     const [running, setRunning] = useState(false)
     const [debugText, setDebugText] = useState("")
@@ -18,13 +18,25 @@ export function Debugger(props) {
             setDebugText("")
             try {
                 const treader = props.port.readable.getReader()
+                
                 await treader.cancel()
                 await treader.releaseLock()
                 setReader(props.port.readable.getReader())
                 setRunning(true)
             }
             catch (error) {
-                console.log(error)
+                toast.error('Error: Cannot read from device', {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setReader(false)
+                setRunning(false)
+                props.setAccessControl(0)
             }
         }
 
