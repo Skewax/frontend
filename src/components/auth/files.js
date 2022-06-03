@@ -68,7 +68,7 @@ const File = (props) => {
                 />
                 <span className='pl-2'>{props.text}</span>
             </div>
-            <Menu id={props.id}>
+            <Menu id={props.id} theme={(props.theme) ? "light":"dark"}>
                 <Item onClick={props.newFilePopup}>
                     Create New File
                 </Item>
@@ -161,7 +161,7 @@ const Files = (props) => {
                         )
                     }
                 </div>
-                <Menu id="FileManagerMenu">
+                <Menu id="FileManagerMenu" theme={(!props.theme) ? "dark":"light"}>
                     <Item onClick={newFilePopup}>
                         Create New File
                     </Item>

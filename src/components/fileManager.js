@@ -275,7 +275,7 @@ export default function FileManager(props) {
     }, [])
 
     return (
-        <div className="w-56 h-full bg-primary flex flex-col bg-slate-50 ">
+        <div className="w-56 h-full bg-primary flex flex-col bg-slate-50 dark:bg-slate-800 ">
             <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className="m-3 ml-4"/>
             {(user ? 
                 <div className="h-full flex flex-col">
@@ -294,10 +294,10 @@ export default function FileManager(props) {
                             className={`absolute top-12 w-full p-5 flex justify-center transform transition-all ${accountContext ? "scale-100" : "scale-0"}`}
                         >
                             <button 
-                                className="bg-white w-40 rounded-md flex justify-center items-center h-10 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.3)]"
+                                className="bg-white dark:bg-slate-700 w-40 rounded-md flex justify-center items-center h-10 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.3)]"
                                 onClick={signOut}
                             >
-                                <span className="text-slate-600">Sign Out</span>
+                                <span className="text-slate-600 dark:text-slate-200">Sign Out</span>
                             </button>
                         </div>
                     </div>

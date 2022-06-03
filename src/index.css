@@ -13,13 +13,29 @@ code {
 }
 
 
-.ace_gutter {
-  background-color: #FFFFFF !important;
+@media (prefers-color-scheme: light) {
+  .ace_gutter {
+    background-color: #FFFFFF !important;
+  }
+  .ace_gutter-active-line {
+    background-color: #FFFFFF !important;
+  }
 }
-.ace_gutter-active-line {
-  background-color: #FFFFFF !important;
+@media (prefers-color-scheme: dark) {
+  .ace_gutter {
+    background-color: #1e293b !important;
+  }
+  .ace_gutter-active-line {
+    background-color: #1e293b !important;
+  }
+  .ace_editor {
+    background-color: #1e293b !important;
+  }
 }
 
+.react-contexify__theme--dark {
+  background-color: rgba(56, 62, 84, 0.98) !important;
+}
 /* .ace_editor (prefers-color-scheme: {
   background: #FFFFFF !important;
 } */
@@ -27,13 +43,13 @@ code {
 
 @layer components {
   .bg-primary {
-    @apply bg-white dark:bg-zinc-800;
+    @apply bg-white dark:bg-slate-800;
   }
   .bg-secondary {
-    @apply bg-slate-100 dark:bg-zinc-900;
+    @apply bg-slate-100 dark:bg-slate-900;
   }
   .select {
-    @apply dark:text-zinc-300 bg-slate-100 dark:bg-zinc-700;
+    @apply dark:text-zinc-300 bg-slate-100 dark:bg-slate-700;
   }
 
   

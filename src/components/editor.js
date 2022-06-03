@@ -24,16 +24,16 @@ export default function Editor(props) {
     }
     return (
         <div className="flex-grow flex-col h-full relative">
-            <div className="absolute z-50 w-full flex justify-center h-14 items-center">
-                <span className=" font-bold text-2xl text-gray-600">{props.fileName}</span>
+            <div className="absolute z-50 w-full flex justify-center h-14 items-center ">
+                <span className=" font-bold text-2xl text-gray-600 dark:text-gray-200">{props.fileName}</span>
                 {props.loading ?
                     <AiOutlineReload
                         size={20}
-                        className="ml-3 animate-spin"
+                        className="ml-3 animate-spin dark:text-gray-200"
                     /> :
                     <BsCloudCheck
                         size={20}
-                        className="ml-3 mt-[3px]"
+                        className="ml-3 mt-[3px] dark:text-gray-200"
     
                     />
                 }
@@ -41,6 +41,7 @@ export default function Editor(props) {
             <AceEditor
                 value={props.code}
                 onChange={props.onChange}
+                theme={props.theme ? "dracula" : "xcode"}
                 name="mainEditor"
                 editorProps={{
                     $blockScrolling: true
