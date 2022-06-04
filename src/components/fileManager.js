@@ -275,7 +275,7 @@ export default function FileManager(props) {
     }, [])
 
     return (
-        <div className="w-56 h-full bg-primary flex flex-col bg-slate-50 dark:bg-slate-800 ">
+        <div className="w-56 h-full bg-primary flex flex-col bg-slate-50 dark:bg-gray-900 ">
             <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className="m-3 ml-4"/>
             {(user ? 
                 <div className="h-full flex flex-col">
