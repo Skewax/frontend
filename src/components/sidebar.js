@@ -131,10 +131,10 @@ export default function Sidebar(props) {
     if(serial) {
         if(port){
             return (
-                <div className="p-2 w-80 border-l border-slate-100 dark:border-slate-700 flex items-start flex-col dark:bg-slate-800 ">
+                <div className="p-2 w-80 border-l border-slate-100 dark:border-slate-700 flex items-start flex-col dark:bg-slate-800 h-full">
                     
                     <div className="w-full flex justify-center">
-                        <span className="font-bold text-slate-400 cursor-pointer" onMouseOver={setText} onMouseLeave={unsetText} onClick={disconnect}>
+                        <span className="font-bold text-slate-400 cursor-pointer select-none" onMouseOver={setText} onMouseLeave={unsetText} onClick={disconnect}>
                             Connected...
                         </span>
                     </div>
@@ -144,10 +144,7 @@ export default function Sidebar(props) {
                         setAccessControl={setAccessControl}    
                         code={props.code}
                     />
-                     <DebugController 
-                        setAccessControl={setAccessControl}
-                        accessControl={accessControl}
-                    />
+                   <br />
                     <Debugger 
                         port={port}
                         accessControl={accessControl}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { FaPlay, FaStopCircle } from "react-icons/fa"
+import { BsDot } from "react-icons/bs"
 import { toast } from 'react-toastify'
 export function Debugger(props) {
     const [running, setRunning] = useState(false)
@@ -70,11 +71,42 @@ export function Debugger(props) {
         }
     }, [reader, debugText, running, props.accessControl])
    
+    function handleDebugClick() {
+        setDebugText("hello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\r")
+        switch(props.accessControl) {
+            case 0:
+                props.setAccessControl(4)
+                break
+            case 4:
+                props.setAccessControl(5)
+                break
+            default:
+                break
+        }
+    }
+
+    function getStatusColor() {
+        switch(props.accessControl) {
+            case 0:
+            case 3:
+                return "text-red-500"
+            case 4:
+            case 5:
+                return "text-green-500"
+            default:
+                return "text-yellow-500"
+        }
+    }
 
     return (
-        <div className="flex justify-center w-full flex-col">
-            <span className="text-slate-500 w-full text-center border-b">Debug Terminal</span>
-            <div className="flex-col flex text-slate-500 pl-2">
+        <div className="flex justify-center w-full flex-col overflow-hidden">
+            <div className="flex w-full justify-center">
+                <div className="flex cursor-pointer select-none" onClick={handleDebugClick}>
+                    <span className="text-slate-500 w-full text-center">Debug Terminal</span>
+                    <span className={` whitespace-pre ${getStatusColor()}`}size={80}>  ●</span>
+                </div>
+            </div>
+            <div className="flex-col flex text-slate-500 pl-2 overflow-y-scroll scrollbar scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
             {debugText.split('\r').map((line, index) => {
                 return <span key={index+"debugTerminalLine"}>{'> '}{line}</span>
             })}
@@ -83,36 +115,3 @@ export function Debugger(props) {
     )
 }
 
-
-
-export function DebugController(props) {
-
-    return (
-        <div className="">
-            {
-                (props.accessControl === 0 ? 
-                    <button 
-                        className="flex items-center"
-                        onClick={() => props.setAccessControl(4)}
-                    >
-                        <FaPlay className="text-green-400 mr-2"/> Listen to Debug Terminal
-                    </button>
-                : (props.accessControl === 2 ? 
-                        <span className="flex items-center">
-                            <FaPlay className="text-grey-200 mr-2"/> Waiting...
-                        </span>
-                : (props.accessControl === 4 || props.accessControl === 5 ?
-                        <button 
-                            className="flex items-center"
-                            onClick={() => props.setAccessControl(5)}
-                        >
-                            <FaStopCircle className="mt-[0.6px] text-red-400 mr-2"/> Stop Listening
-                        </button> :
-                        <span className="flex items-center">
-                            <FaPlay className="text-grey-200 mr-2"/> Compiling...
-                        </span>
-                )))
-            }
-        </div>
-    )
-}

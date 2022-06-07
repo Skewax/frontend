@@ -99,7 +99,7 @@ export default function Compiler(props) {
             
             <div
                 onClick={beginCompile} 
-                className="bg-sky-600 rounded-lg w-44 text-white font-bold h-10 text-xl flex items-center cursor-pointer"
+                className="bg-sky-600 rounded-lg w-44 text-white font-bold h-10 text-xl flex items-center cursor-pointer select-none"
             >
                 {props.accessControl === 3 ? <ImSpinner2 className="text-white pl-4 origin-[70%_50%] animate-spin "  size={40}/>: <FaHammer className="text-white pl-4" size={38}/>}
                 
