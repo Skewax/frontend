@@ -24,7 +24,6 @@ export default function Compiler(props) {
 
     async function doCompile() {
         const compiled = pbasic.compile(props.code, false)
-        console.log(compiled)
         if(compiled.Succeeded === true) {
             const flasher = new Flasher(props.port) 
             let flashPromise = new Promise((resolve, reject) => {

@@ -15,9 +15,9 @@ export default function Editor(props) {
 
     if(props.code === false){
         return (
-            <div className="flex-grow flex-col h-full relative">
+            <div className="flex-grow flex-col h-full relative dark:bg-slate-800">
                 <div className="w-full flex items-center justify-center h-full">
-                    <span>Sign In and Select a File</span>
+                    <span className="dark:text-slate-200">Sign In and Select a File</span>
                 </div>
             </div>
         )

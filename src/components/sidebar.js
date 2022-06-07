@@ -17,9 +17,6 @@ export default function Sidebar(props) {
 
     useEffect(() => {
         async function handleUsbConnect(event) {
-            console.log("connecting")
-            console.log(port)
-            console.log("donePort")
             try{
                 const reader = await port.readable.getReader()
                 await reader.releaseLock()
@@ -30,7 +27,12 @@ export default function Sidebar(props) {
                         port.close()
                     }
                     const ports = await navigator.serial.getPorts()
-                    setPort(ports[0])
+                    if(ports === 0) {
+                        setPort(ports[0])
+                    }
+                    else {
+                        setPort(0)
+                    }
             }
                 catch(error) {
                     console.log(error)
@@ -38,18 +40,19 @@ export default function Sidebar(props) {
             }
             if(!port) {
                 const ports = await navigator.serial.getPorts()
-                console.log(ports)
             }
         }
         async function handleUsbDisconnect(event) {
             await port.close()
             setPort(false)
         }
-        navigator.serial.addEventListener('connect', handleUsbConnect)
-        navigator.serial.addEventListener('disconnect', handleUsbDisconnect)
-        return () => {
-            navigator.serial.removeEventListener('connect', handleUsbConnect)
-            navigator.serial.removeEventListener('disconnect', handleUsbDisconnect)
+        if(navigator.serial) {
+            navigator.serial.addEventListener('connect', handleUsbConnect)
+            navigator.serial.addEventListener('disconnect', handleUsbDisconnect)
+            return () => {
+                navigator.serial.removeEventListener('connect', handleUsbConnect)
+                navigator.serial.removeEventListener('disconnect', handleUsbDisconnect)
+            }
         }
     })
 
@@ -82,13 +85,13 @@ export default function Sidebar(props) {
         else {
             console.log("port closed")
             await port.close()
-            setPort(0)
+            setPort(false)
         }
     }
 
     useEffect(() => {
         async function awaitOpen() {
-            if (port !== 0 && !port.readable && !port.writable) {
+            if (port !== 0 && port !== false && !port.readable && !port.writable) {
                 await port.open({baudRate: 9600})
                 console.log(port)
                 if(port.readable === null) {
@@ -107,12 +110,22 @@ export default function Sidebar(props) {
 
     async function tryAutoConnect() {
         try {
-            const ports = await navigator.serial.getPorts()
-            setPort(ports[0])
+            if(port !== false) {
+                const ports = await navigator.serial.getPorts()
+                setPort(ports[0])
+                console.log("auto connected")
+            }
         }
         catch(error) {
             console.log(error)
         }
+    }
+
+    function setText(e) {
+        e.target.textContent = "Disconnect"
+    }
+    function unsetText(e) {
+        e.target.textContent = "Connected..."
     }
 
     if(serial) {
@@ -121,8 +134,8 @@ export default function Sidebar(props) {
                 <div className="p-2 w-80 border-l border-slate-100 dark:border-slate-700 flex items-start flex-col dark:bg-slate-800 ">
                     
                     <div className="w-full flex justify-center">
-                        <span className="font-bold text-slate-400">
-                            Connected
+                        <span className="font-bold text-slate-400 cursor-pointer" onMouseOver={setText} onMouseLeave={unsetText} onClick={disconnect}>
+                            Connected...
                         </span>
                     </div>
                     <Compiler 
@@ -146,9 +159,9 @@ export default function Sidebar(props) {
         else {
             tryAutoConnect()
             return (
-                <div className="w-80 border-l border-slate-100 flex justify-center items-center">
+                <div className="w-80 border-l border-slate-100 flex justify-center items-center dark:bg-slate-800 dark:border-slate-900">
                     <button
-                        className="w-24 h-24 rounded-lg border-1 shadow-lg transition-all hover:shadow-md border border-slate-100 text-slate-500 font-bold"
+                        className="w-24 h-24 rounded-lg border-1 shadow-lg transition-all hover:shadow-md border border-slate-100 text-slate-500  dark:text-slate-200 dark:border-0 dark:shadow-xl transform transition-all dark:hover:scale-105 dark:bg-slate-700 font-bold"
                         onClick={connect}
                     >
                         Connect <br /> to <br /> Device
@@ -160,9 +173,9 @@ export default function Sidebar(props) {
     else {
     return (
         <div
-            className="w-80 border-l border-slate-100 flex"
+            className="w-80 border-l border-slate-100 flex dark:bg-slate-800 dark:border-slate-900"
         >
-            <span className="text-slate-600 m-2">
+            <span className="text-slate-600 m-2 dark:text-slate-200">
                 This browser does not support the Web Serial API, so you won't be able to compile and flash it <br /><br /> You can still write code, however
             </span>
         </div>
