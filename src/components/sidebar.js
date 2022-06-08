@@ -74,7 +74,7 @@ export default function Sidebar(props) {
 
     async function connect() {
         setPort(await navigator.serial.requestPort({
-            //add usb filters here
+            filters: [{ usbVendorId: '1027' }]
         }))
     }
 
@@ -83,7 +83,6 @@ export default function Sidebar(props) {
             alert("Skewax is currently using the port. Make sure to turn off the debug terminal and finish compiling before disconnecting from the device")
         }
         else {
-            console.log("port closed")
             await port.close()
             setPort(false)
         }
@@ -93,7 +92,6 @@ export default function Sidebar(props) {
         async function awaitOpen() {
             if (port !== 0 && port !== false && !port.readable && !port.writable) {
                 await port.open({baudRate: 9600})
-                console.log(port)
                 if(port.readable === null) {
                     alert("could not open port")
                     setPort(0)
@@ -112,8 +110,8 @@ export default function Sidebar(props) {
         try {
             if(port !== false) {
                 const ports = await navigator.serial.getPorts()
-                setPort(ports[0])
-                console.log("auto connected")
+                const filtered = ports.filter(p => p.getInfo().usbVendorId === 1027)
+                setPort(filtered[0])
             }
         }
         catch(error) {
@@ -173,7 +171,7 @@ export default function Sidebar(props) {
             className="w-80 border-l border-slate-100 flex dark:bg-slate-800 dark:border-slate-900"
         >
             <span className="text-slate-600 m-2 dark:text-slate-200">
-                This browser does not support the Web Serial API, so you won't be able to compile and flash it <br /><br /> You can still write code, however
+                This browser does not support the Web Serial API, so you won't be able to compile and flash code <br /><br /> You can still write, however
             </span>
         </div>
     )

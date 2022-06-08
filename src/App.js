@@ -2,8 +2,7 @@ import Editor from "./components/editor";
 import FileManager from "./components/fileManager";
 import Sidebar from "./components/sidebar";
 import {
-  useState,
-  useEffect
+  useState
 } from "react"
 import { useMediaQuery } from 'react-responsive';
 import { ToastContainer } from 'react-toastify'

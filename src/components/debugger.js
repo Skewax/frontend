@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react"
-import { FaPlay, FaStopCircle } from "react-icons/fa"
-import { BsDot } from "react-icons/bs"
 import { toast } from 'react-toastify'
 export function Debugger(props) {
     const [running, setRunning] = useState(false)
@@ -72,7 +70,6 @@ export function Debugger(props) {
     }, [reader, debugText, running, props.accessControl])
    
     function handleDebugClick() {
-        setDebugText("hello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\rhello\rhi\r")
         switch(props.accessControl) {
             case 0:
                 props.setAccessControl(4)
