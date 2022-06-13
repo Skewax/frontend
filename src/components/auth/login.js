@@ -23,6 +23,7 @@ const LoginButton = (props) => {
                 onFailure={onFailure}
                 cookiePolicy={'single_host_origin'}
                 isSignedIn={true}
+                theme={(props.theme) ? "dark" : "light"}
             />
         </div>
     )

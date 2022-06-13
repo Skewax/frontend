@@ -3,7 +3,8 @@ import { BsFileEarmarkText } from 'react-icons/bs'
 import {
     Menu,
     Item,
-    useContextMenu
+    useContextMenu,
+    theme
   } from "react-contexify";
 import "react-contexify/dist/ReactContexify.css";
 
@@ -68,7 +69,7 @@ const File = (props) => {
                 />
                 <span className='pl-2'>{props.text}</span>
             </div>
-            <Menu id={props.id} theme={(props.theme) ? "light":"dark"}>
+            <Menu id={props.id} theme={(props.theme) ? "dark":"light"}>
                 <Item onClick={props.newFilePopup}>
                     Create New File
                 </Item>
@@ -135,6 +136,7 @@ const Files = (props) => {
                                         createFile={props.createFile}
                                         deleteFile={() => {props.deleteFile(file)}}
                                         renameFile={(name) => {props.renameFile(file, name)}}
+                                        theme={props.theme}
                                     />
                             )
                         }) : <div className="text-center text-slate-500">Right Click To Create a File</div>)
@@ -161,7 +163,7 @@ const Files = (props) => {
                         )
                     }
                 </div>
-                <Menu id="FileManagerMenu" theme={(!props.theme) ? "dark":"light"}>
+                <Menu id="FileManagerMenu" theme={(props.theme) ? "dark":"light"}>
                     <Item onClick={newFilePopup}>
                         Create New File
                     </Item>

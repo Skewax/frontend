@@ -310,11 +310,12 @@ export default function FileManager(props) {
                         getFiles={getFiles}
                         deleteFile={deleteFile}
                         renameFile={renameFile}
+                        theme={props.theme}
                     />
                 </div> 
                 :
                 <div className="flex justify-center items-center h-full">
-                    <LoginButton setUser={setUser} />
+                    <LoginButton setUser={setUser} theme={props.theme} />
                 </div>
             )}
         </div>
