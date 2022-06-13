@@ -103,7 +103,7 @@ export function Debugger(props) {
                     <span className={` whitespace-pre ${getStatusColor()}`}size={80}>  ●</span>
                 </div>
             </div>
-            <div className="flex-col flex text-slate-500 pl-2 overflow-y-scroll scrollbar scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
+            <div className="flex flex-col-reverse text-slate-500 pl-2 overflow-y-scroll scrollbar scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
             {debugText.split('\r').map((line, index) => {
                 return <span key={index+"debugTerminalLine"}>{'> '}{line}</span>
             })}
