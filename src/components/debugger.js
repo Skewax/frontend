@@ -96,10 +96,10 @@ export function Debugger(props) {
     }
 
     return (
-        <div className="flex justify-center w-full flex-col overflow-hidden">
+        <div className="flex justify-center w-full flex-col overflow-hidden pt-5">
             <div className="flex w-full justify-center">
-                <div className="flex cursor-pointer select-none" onClick={handleDebugClick}>
-                    <span className="text-slate-500 w-full text-center">Debug Terminal</span>
+                <div className="flex cursor-pointer select-none bg-slate-100 rounded-lg p-2 font-bold" onClick={handleDebugClick}>
+                    <span className="text-slate-400 w-full text-center">Debug Terminal</span>
                     <span className={` whitespace-pre ${getStatusColor()}`}size={80}>  ●</span>
                 </div>
             </div>

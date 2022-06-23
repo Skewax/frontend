@@ -120,7 +120,7 @@ export default function Sidebar(props) {
     }
 
     function setText(e) {
-        e.target.textContent = "Disconnect"
+        e.target.textContent = " Disconnect "
     }
     function unsetText(e) {
         e.target.textContent = "Connected..."
@@ -132,10 +132,11 @@ export default function Sidebar(props) {
                 <div className="p-2 w-80 border-l border-slate-100 dark:border-slate-700 flex items-start flex-col dark:bg-slate-800 h-full">
                     
                     <div className="w-full flex justify-center">
-                        <span className="font-bold text-slate-400 cursor-pointer select-none" onMouseOver={setText} onMouseLeave={unsetText} onClick={disconnect}>
+                        <span className="bg-slate-100 shadow-sm whitespace-pre rounded-md p-2 font-bold text-slate-400 cursor-pointer select-none" onMouseOver={setText} onMouseLeave={unsetText} onClick={disconnect}>
                             Connected...
                         </span>
                     </div>
+                    <br />
                     <Compiler 
                         port={port}
                         accessControl={accessControl}
@@ -156,7 +157,7 @@ export default function Sidebar(props) {
             return (
                 <div className="w-80 border-l border-slate-100 flex justify-center items-center dark:bg-slate-800 dark:border-slate-900">
                     <button
-                        className="w-24 h-24 rounded-lg border-1 shadow-lg transition-all hover:shadow-md border border-slate-100 text-slate-500  dark:text-slate-200 dark:border-0 dark:shadow-xl transform transition-all dark:hover:scale-105 dark:bg-slate-700 font-bold"
+                        className="w-24 h-24 rounded-lg border-1 shadow-lg transition-all hover:shadow-md border border-slate-100 text-slate-500  dark:text-slate-200 dark:border-0 dark:shadow-xl transform dark:hover:scale-105 dark:bg-slate-700 font-bold"
                         onClick={connect}
                     >
                         Connect <br /> to <br /> Device
