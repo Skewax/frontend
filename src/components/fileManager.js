@@ -255,7 +255,7 @@ export default function FileManager(props) {
     const signOut = () => {
         const auth2 = gapi.auth2.getAuthInstance() 
         if(auth2 != null) {
-            auth2.signOut().then(auth2.disconnect().then(setUser(false)))
+            auth2.signOut().then(auth2.disconnect().then(setUser(false))).then(props.setFileName("NOT SIGNED IN"))
         }
     }
 

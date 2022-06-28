@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import AceEditor from "react-ace";
 import { BsCloudCheck } from "react-icons/bs"
 import { AiOutlineReload } from "react-icons/ai"
+import { ImCross } from "react-icons/im";
 
 import "ace-builds/src-noconflict/theme-xcode"
 import "ace-builds/src-noconflict/theme-dracula"
@@ -26,11 +27,17 @@ export default function Editor(props) {
         <div className="flex-grow flex-col h-full relative">
             <div className="absolute z-50 w-full flex justify-center h-14 items-center ">
                 <span className=" font-bold text-2xl text-gray-600 dark:text-gray-200">{props.fileName}</span>
-                {props.loading ?
+                {props.fileName === "NOT SIGNED IN" ?
+                    <ImCross
+                        size={20}
+                        className="ml-3 mt-[0.5px] text-slate-600 dark:text-gray-500"
+                    /> 
+                    : props.loading ?
                     <AiOutlineReload
                         size={20}
                         className="ml-3 animate-spin dark:text-gray-200"
-                    /> :
+                    />
+                    :
                     <BsCloudCheck
                         size={20}
                         className="ml-3 mt-[3px] dark:text-gray-200"
