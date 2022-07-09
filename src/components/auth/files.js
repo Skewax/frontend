@@ -118,9 +118,9 @@ const Files = (props) => {
 
     if(props.files) {
         return (
-            <>
+            <div className='flex-grow'>
                 <div 
-                    className="mt-14 pt-6 grow"
+                    className="pt-20 w-full flex-grow"
                     onContextMenu={displayMenu}
                     id={"FileManager"}
                 >
@@ -137,6 +137,7 @@ const Files = (props) => {
                                         deleteFile={() => {props.deleteFile(file)}}
                                         renameFile={(name) => {props.renameFile(file, name)}}
                                         theme={props.theme}
+                                        newFilePopup={newFilePopup}
                                     />
                             )
                         }) : <div className="text-center text-slate-500">Right Click To Create a File</div>)
@@ -168,7 +169,7 @@ const Files = (props) => {
                         Create New File
                     </Item>
                 </Menu>
-            </>
+            </div>
         )
     }
     return (
