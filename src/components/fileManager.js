@@ -149,12 +149,34 @@ export default function FileManager(props) {
         setFiles([ ...files])
     }
 
+    const requestScope = (profileObj) => {
+        const options = new gapi.auth2.SigninOptionsBuilder({
+            'scope': SCOPES
+        })
+        let googleUser = gapi.auth2.getAuthInstance().currentUser.get()
+        
+        googleUser.grant(options).then(
+            function(success){
+                console.log(success)
+                if(success.error) {
+                    alert("error: " + toString(success.error))
+                }
+                setUser(profileObj)
+            },
+            function(fail){
+                alert("Please grant all scopes")
+                requestScope(profileObj)
+            }
+        )
+    }
+
     useEffect(() => {
         setAccountContext(false)
         if(user) {
             getFiles()
         }
     }, [user])
+
 
     useEffect(() => {
         if(files) {
@@ -315,7 +337,7 @@ export default function FileManager(props) {
                 </div> 
                 :
                 <div className="flex justify-center items-center h-full">
-                    <LoginButton setUser={setUser} theme={props.theme} />
+                    <LoginButton setUser={setUser} theme={props.theme} requestScope={requestScope} />
                 </div>
             )}
         </div>
