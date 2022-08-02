@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { toast } from 'react-toastify'
+import { useHotkeys } from "react-hotkeys-hook"
 export function Debugger(props) {
     const [running, setRunning] = useState(false)
     const [debugText, setDebugText] = useState("")
@@ -81,6 +82,10 @@ export function Debugger(props) {
                 break
         }
     }
+
+    useHotkeys('ctrl+alt+d', () => {
+        handleDebugClick()
+    }, {enableOnTags: ['TEXTAREA']})
 
     function getStatusColor() {
         switch(props.accessControl) {

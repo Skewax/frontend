@@ -4,12 +4,13 @@ import pbasic from "pbasic-tokenizer"
 import { toast } from "react-toastify"
 import { FaHammer } from "react-icons/fa"
 import { ImSpinner2 } from "react-icons/im"
+import { useHotkeys } from "react-hotkeys-hook"
 export default function Compiler(props) {
 
     const [running, setRunning] = useState(false)
 
     function beginCompile() {
-        if(props.accessControl === 0) {
+         if(props.accessControl === 0) {
             props.setAccessControl(3)
         }
         else {
@@ -21,6 +22,9 @@ export default function Compiler(props) {
             props.setAccessControl(2)
     }
 
+    useHotkeys('ctrl+r', () => {
+        beginCompile()
+    }, {enableOnTags: ['TEXTAREA']})
 
     async function doCompile() {
         const compiled = pbasic.compile(props.code, false)
@@ -93,7 +97,6 @@ export default function Compiler(props) {
             doCompile()
         }
     }, [running])
-
     return ( 
         <div className="w-full flex justify-center">
             

@@ -8,7 +8,6 @@ const LoginButton = (props) => {
 
     function onSuccess(res) {
         let inc = res.tokenObj.scope
-        console.log(inc)
         if(
             inc.includes("email") && 
             inc.includes("profile") && 

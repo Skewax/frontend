@@ -6,6 +6,7 @@ import {
     useContextMenu,
     theme
   } from "react-contexify";
+import { useHotkeys } from 'react-hotkeys-hook';
 import "react-contexify/dist/ReactContexify.css";
 
 const File = (props) => {
@@ -100,6 +101,11 @@ const Files = (props) => {
             setNewFile("")
         }
     }
+
+    useHotkeys('ctrl+alt+n', () => {
+        newFilePopup()
+    }, {enableOnTags: ['TEXTAREA']})
+
     function newFileKeyDown(e) {
         if(e.keyCode === 27) {
             e.preventDefault()
