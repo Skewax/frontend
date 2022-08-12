@@ -300,7 +300,7 @@ export default function FileManager(props) {
         <div className="w-56 h-full bg-primary flex flex-col bg-slate-50 dark:bg-gray-900 ">
             <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className="m-3 ml-4 flex-grow"/>
             {(user ? 
-                <div className="flex flex-col flex-grow overflow-y-scroll">
+                <div className="flex flex-col flex-grow overflow-y-scroll h-max">
                     {user.imageUrl ? 
                     <div className="relative pt-3 flex-grow" onClick={() => setAccountContext(true)} ref={ref}>
                         <div className="px-5 absolute  flex items-center cursor-pointer">

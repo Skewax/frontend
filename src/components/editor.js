@@ -1,18 +1,28 @@
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import AceEditor from "react-ace"
 import { BsCloudCheck, BsMicFill } from "react-icons/bs"
 import { AiOutlineReload, AiOutlineQuestionCircle } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
-import "ace-builds/src-noconflict/theme-xcode"
+import "ace-builds/src-noconflict/theme-github"
 import "ace-builds/src-noconflict/theme-dracula"
 import 'ace-builds/src-min-noconflict/ext-searchbox'
+import PbasicMode from "./pbasicrules"
 import { FaXRay } from "react-icons/fa"
 
 
 
 
 function Editor(props) {
+
+    const aceEditorRef = useRef(null);
+
+    useEffect(() => {
+        const pbasicMode = new PbasicMode();
+        if(aceEditorRef.current != null){
+            aceEditorRef.current.editor.session.setMode(pbasicMode);
+        }
+    }, [aceEditorRef])
 
     useEffect(() => {
 
@@ -59,9 +69,11 @@ function Editor(props) {
                 }
             </div>
             <AceEditor
+                ref={aceEditorRef}
                 value={props.code}
                 onChange={props.onChange}
-                theme={props.theme ? "dracula" : "xcode"}
+                theme={props.theme ? "dracula" : "github"}
+                mode={'pbasic'}
                 name="mainEditor"
                 editorProps={{
                     $blockScrolling: true

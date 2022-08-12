@@ -179,7 +179,7 @@ const Files = (props) => {
         )
     }
     return (
-        <div className='flex justify-center items-center'>
+        <div className='flex justify-center items-center h-max'>
             <span>Loading</span>
         </div>
     )
