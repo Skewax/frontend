@@ -4,12 +4,13 @@ import pbasic from "pbasic-tokenizer"
 import { toast } from "react-toastify"
 import { FaHammer } from "react-icons/fa"
 import { ImSpinner2 } from "react-icons/im"
+import { useHotkeys } from "react-hotkeys-hook"
 export default function Compiler(props) {
 
     const [running, setRunning] = useState(false)
 
     function beginCompile() {
-        if(props.accessControl === 0) {
+         if(props.accessControl === 0) {
             props.setAccessControl(3)
         }
         else {
@@ -21,6 +22,9 @@ export default function Compiler(props) {
             props.setAccessControl(2)
     }
 
+    useHotkeys('ctrl+r', () => {
+        beginCompile()
+    }, {enableOnTags: ['TEXTAREA']})
 
     async function doCompile() {
         const compiled = pbasic.compile(props.code, false)
@@ -93,13 +97,12 @@ export default function Compiler(props) {
             doCompile()
         }
     }, [running])
-
     return ( 
         <div className="w-full flex justify-center">
             
             <div
                 onClick={beginCompile} 
-                className="bg-sky-600 rounded-lg w-44 text-white font-bold h-10 text-xl flex items-center cursor-pointer select-none"
+                className="bg-sky-600 rounded-lg w-44 text-white font-bold h-10 text-xl flex items-center cursor-pointer select-none shadow-lg"
             >
                 {props.accessControl === 3 ? <ImSpinner2 className="text-white pl-4 origin-[70%_50%] animate-spin "  size={40}/>: <FaHammer className="text-white pl-4" size={38}/>}
                 

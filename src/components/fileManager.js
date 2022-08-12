@@ -149,12 +149,34 @@ export default function FileManager(props) {
         setFiles([ ...files])
     }
 
+    const requestScope = (profileObj) => {
+        const options = new gapi.auth2.SigninOptionsBuilder({
+            'scope': SCOPES
+        })
+        let googleUser = gapi.auth2.getAuthInstance().currentUser.get()
+        
+        googleUser.grant(options).then(
+            function(success){
+                console.log(success)
+                if(success.error) {
+                    alert("error: " + toString(success.error))
+                }
+                setUser(profileObj)
+            },
+            function(fail){
+                alert("Please grant all scopes")
+                requestScope(profileObj)
+            }
+        )
+    }
+
     useEffect(() => {
         setAccountContext(false)
         if(user) {
             getFiles()
         }
     }, [user])
+
 
     useEffect(() => {
         if(files) {
@@ -255,7 +277,7 @@ export default function FileManager(props) {
     const signOut = () => {
         const auth2 = gapi.auth2.getAuthInstance() 
         if(auth2 != null) {
-            auth2.signOut().then(auth2.disconnect().then(setUser(false)))
+            auth2.signOut().then(auth2.disconnect().then(setUser(false))).then(props.setFileName("NOT SIGNED IN"))
         }
     }
 
@@ -276,11 +298,11 @@ export default function FileManager(props) {
 
     return (
         <div className="w-56 h-full bg-primary flex flex-col bg-slate-50 dark:bg-gray-900 ">
-            <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className="m-3 ml-4"/>
+            <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className="m-3 ml-4 flex-grow"/>
             {(user ? 
-                <div className="h-full flex flex-col">
+                <div className="flex flex-col flex-grow overflow-y-scroll">
                     {user.imageUrl ? 
-                    <div className="relative pt-3" onClick={() => setAccountContext(true)} ref={ref}>
+                    <div className="relative pt-3 flex-grow" onClick={() => setAccountContext(true)} ref={ref}>
                         <div className="px-5 absolute  flex items-center cursor-pointer">
                             <img src={user.imageUrl} referrerPolicy="no-referrer" alt={"icon"} 
                                 className="rounded-full"
@@ -310,11 +332,12 @@ export default function FileManager(props) {
                         getFiles={getFiles}
                         deleteFile={deleteFile}
                         renameFile={renameFile}
+                        theme={props.theme}
                     />
                 </div> 
                 :
                 <div className="flex justify-center items-center h-full">
-                    <LoginButton setUser={setUser} />
+                    <LoginButton setUser={setUser} theme={props.theme} requestScope={requestScope} />
                 </div>
             )}
         </div>

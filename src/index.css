@@ -52,6 +52,10 @@ code {
     @apply dark:text-zinc-300 bg-slate-100 dark:bg-slate-800;
   }
 
+  .secondary-button {
+    @apply bg-slate-100 shadow-sm whitespace-pre rounded-md p-2 font-bold text-slate-400 cursor-pointer dark:bg-slate-700 dark:shadow-xl;
+  }
+
   
 }
 

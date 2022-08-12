@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { toast } from 'react-toastify'
+import { useHotkeys } from "react-hotkeys-hook"
 export function Debugger(props) {
     const [running, setRunning] = useState(false)
     const [debugText, setDebugText] = useState("")
@@ -82,6 +83,10 @@ export function Debugger(props) {
         }
     }
 
+    useHotkeys('ctrl+alt+d', () => {
+        handleDebugClick()
+    }, {enableOnTags: ['TEXTAREA']})
+
     function getStatusColor() {
         switch(props.accessControl) {
             case 0:
@@ -96,14 +101,14 @@ export function Debugger(props) {
     }
 
     return (
-        <div className="flex justify-center w-full flex-col overflow-hidden">
+        <div className="flex justify-center w-full flex-col overflow-hidden pt-5">
             <div className="flex w-full justify-center">
-                <div className="flex cursor-pointer select-none" onClick={handleDebugClick}>
-                    <span className="text-slate-500 w-full text-center">Debug Terminal</span>
+                <div className="flex select-none secondary-button" onClick={handleDebugClick}>
+                    <span className="text-slate-400 w-full text-center">Debug Terminal</span>
                     <span className={` whitespace-pre ${getStatusColor()}`}size={80}>  ●</span>
                 </div>
             </div>
-            <div className="flex-col flex text-slate-500 pl-2 overflow-y-scroll scrollbar scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
+            <div className="flex flex-col-reverse text-slate-500 pl-2 overflow-y-scroll scrollbar scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700">
             {debugText.split('\r').map((line, index) => {
                 return <span key={index+"debugTerminalLine"}>{'> '}{line}</span>
             })}

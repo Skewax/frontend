@@ -3,8 +3,10 @@ import { BsFileEarmarkText } from 'react-icons/bs'
 import {
     Menu,
     Item,
-    useContextMenu
+    useContextMenu,
+    theme
   } from "react-contexify";
+import { useHotkeys } from 'react-hotkeys-hook';
 import "react-contexify/dist/ReactContexify.css";
 
 const File = (props) => {
@@ -68,7 +70,7 @@ const File = (props) => {
                 />
                 <span className='pl-2'>{props.text}</span>
             </div>
-            <Menu id={props.id} theme={(props.theme) ? "light":"dark"}>
+            <Menu id={props.id} theme={(props.theme) ? "dark":"light"}>
                 <Item onClick={props.newFilePopup}>
                     Create New File
                 </Item>
@@ -99,6 +101,11 @@ const Files = (props) => {
             setNewFile("")
         }
     }
+
+    useHotkeys('ctrl+alt+n', () => {
+        newFilePopup()
+    }, {enableOnTags: ['TEXTAREA']})
+
     function newFileKeyDown(e) {
         if(e.keyCode === 27) {
             e.preventDefault()
@@ -117,9 +124,9 @@ const Files = (props) => {
 
     if(props.files) {
         return (
-            <>
+            <div className='flex-grow'>
                 <div 
-                    className="mt-14 pt-6 grow"
+                    className="pt-20 w-full flex-grow"
                     onContextMenu={displayMenu}
                     id={"FileManager"}
                 >
@@ -135,6 +142,8 @@ const Files = (props) => {
                                         createFile={props.createFile}
                                         deleteFile={() => {props.deleteFile(file)}}
                                         renameFile={(name) => {props.renameFile(file, name)}}
+                                        theme={props.theme}
+                                        newFilePopup={newFilePopup}
                                     />
                             )
                         }) : <div className="text-center text-slate-500">Right Click To Create a File</div>)
@@ -161,12 +170,12 @@ const Files = (props) => {
                         )
                     }
                 </div>
-                <Menu id="FileManagerMenu" theme={(!props.theme) ? "dark":"light"}>
+                <Menu id="FileManagerMenu" theme={(props.theme) ? "dark":"light"}>
                     <Item onClick={newFilePopup}>
                         Create New File
                     </Item>
                 </Menu>
-            </>
+            </div>
         )
     }
     return (
