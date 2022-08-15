@@ -4,11 +4,11 @@ import AceEditor from "react-ace"
 import { BsCloudCheck, BsMicFill } from "react-icons/bs"
 import { AiOutlineReload, AiOutlineQuestionCircle } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
-import "ace-builds/src-noconflict/theme-github"
+import 'ace-builds/webpack-resolver'
+import "ace-builds/src-noconflict/theme-xcode"
 import "ace-builds/src-noconflict/theme-dracula"
 import 'ace-builds/src-min-noconflict/ext-searchbox'
 import PbasicMode from "./pbasicrules"
-import { FaXRay } from "react-icons/fa"
 
 
 
@@ -31,6 +31,15 @@ function Editor(props) {
     const [showModal, setShowModal] = useState(false)
 
     if(props.code === false){
+        return (
+            <div className="flex-grow flex-col h-full relative dark:bg-slate-800">
+                <div className="w-full flex items-center justify-center h-full">
+                    <span className="dark:text-slate-200">Loading...</span>
+                </div>
+            </div>
+        )
+    }
+    if(props.code === -1){
         return (
             <div className="flex-grow flex-col h-full relative dark:bg-slate-800">
                 <div className="w-full flex items-center justify-center h-full">
@@ -72,8 +81,8 @@ function Editor(props) {
                 ref={aceEditorRef}
                 value={props.code}
                 onChange={props.onChange}
-                theme={props.theme ? "dracula" : "github"}
-                mode={'pbasic'}
+                theme={props.theme ? "dracula" : "xcode"}
+                mode=""
                 name="mainEditor"
                 editorProps={{
                     $blockScrolling: true
@@ -86,6 +95,7 @@ function Editor(props) {
                     editor.renderer.setPadding(56); 
                     editor.renderer.setScrollMargin(56); 
                     editor.keyBinding.removeKeyboardHandler('ctrl+r');
+                    editor.session.setMode(new PbasicMode());
                 }}
                 height='100%'
                 showGutter={true}
