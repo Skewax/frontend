@@ -173,7 +173,11 @@ export default function FileManager(props) {
     useEffect(() => {
         setAccountContext(false)
         if(user) {
+            if(props.code === -1) props.setCode(false)
             getFiles()
+        }
+        else {
+            props.setCode(-1)
         }
     }, [user])
 

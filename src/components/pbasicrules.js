@@ -1,5 +1,7 @@
 
-export class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_rules").TextHighlightRules {
+let Range = window.ace.acequire('ace/range').Range;
+
+class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_rules").TextHighlightRules {
 	constructor() {
 		super();
         this.$rules = {
@@ -40,7 +42,7 @@ export class CustomHighlightRules extends window.ace.acequire("ace/mode/text_hig
                 caseInsensitive: true,
                 regex : 'debug'
             }, {
-               token : "meta",
+               token : "variable-declaration",
                caseInsensitive: true,
                regex : ' .* = ' 
             }, {
@@ -58,13 +60,33 @@ export default class PbasicMode extends window.ace.acequire('ace/mode/text').Mod
 	constructor() {
 		super();
 		this.HighlightRules = CustomHighlightRules;
+
+        this.toggleCommentLines = (state, doc, startRow, endRow) => {
+            let alterLine = null
+            if(doc.getLine(startRow)[0] === "'") {
+                alterLine = (line) => {
+                 return line.substring(1, line.length)
+                }
+            }
+            else {
+                alterLine = (line) => {
+                    return (line[0] === "'" ? "" : "'") + line
+                }
+            }
+
+            for (let i = startRow; i <= endRow; i++) {
+                let line = doc.getLine(i);
+                doc.replace(new Range(i, 0, i, line.length), alterLine(line));
+            }
+        }
+
         this.getNextLineIndent = function(state, line, tab) {
             var indent = this.$getIndent(line);
     
             var tokenizedLine = this.getTokenizer().getLineTokens(line, state);
             var tokens = tokenizedLine.tokens;
     
-            if (tokens.length && tokens[tokens.length-1].type == "comment") {
+            if (tokens.length && tokens[tokens.length-1].type === "comment") {
                 return indent;
             }
     
@@ -93,20 +115,19 @@ export default class PbasicMode extends window.ace.acequire('ace/mode/text').Mod
                 }
                 return !emptys[value] 
             })
-            
-            if(outdents[tokens[tokens.length-1]]) {
+            if(tokens.length === 1 && outdents[tokens[0]]) {
                 return 1
             }
             return 0
         }
 
-        this.autoOutdent = function(state, doc, row) {
-            console.log(doc)
+        this.autoOutdent = (state, doc, row) => {
             row += 1;
             var indent = this.$getIndent(doc.getLine(row));
             var tab = doc.getTabString();
-            if (indent.slice(-tab.length) == tab)
+            if (indent.slice(-tab.length) === tab)
                 doc.remove(new Range(row, indent.length-tab.length, row, indent.length));
         };
 	}
 }
+
