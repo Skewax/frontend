@@ -18,12 +18,12 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
             'if',
             'exit',
             'on',
+            'for',
             'gosub',
             'run',
             'pollrun',
             'stop',
             'eeprom',
-            'data',
             'read',
             'write',
             'store',
@@ -75,7 +75,7 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
             'end',
             'debug',
             'debugin',
-
+            'word'
         ]
 
         this.redentCommands = [
@@ -96,13 +96,19 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
             'byte',
             'word',
             'nib',
-            'bit'
+            'bit',
+            'data'
         ]
 
         this.constants = [
             'cr',
         ]
     
+        this.varDeclarations = [
+            'var',
+            'con',
+            'data',
+        ]
 
         this.comparators = [
             '=',
@@ -161,8 +167,13 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
                     regex: "(^|\\s)(" + this.constants.join("|")+")(\\s|$)",
                     caseInsensitive: true,
                     next: "start"
+                }, 
+                {
+                    token: "keyword",
+                    regex: "("+this.varDeclarations.join("|")+")",
+                    caseInsensitive: true,
+                    next: "var"
                 }
-
             ],
             "string": [
                 {
@@ -172,6 +183,46 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
                 }, {
                     defaultToken: "string"
                 }
+            ],
+            "vstring": [
+                {
+                    token: "string",
+                    regex: "\"",
+                    next: "var"
+                }, {
+                    defaultToken: "string"
+                }
+            ],
+            "var": [
+                {
+                    token: "storage.type",
+                    regex: "(" + this.varTypes.join("|")+")(\\s|$|,)",
+                    caseInsensitive: true,
+                    next: "var"
+                }, {
+                    token: "constant.numeric",
+                    regex: "[0-9]",
+                    next: "var"
+                }, {
+                    token: "string",
+                    regex: "\"",
+                    next: "vstring"
+                },  {
+                    token: "constant.numeric",
+                    regex: "(^|\\s)(" + this.constants.join("|")+")(\\s|$|,)",
+                    caseInsensitive: true,
+                    next: "var"
+                }, {
+                    token: "comment",
+                    regex: "'.*",
+                    next: "start"
+                }, {
+                    token: "text",
+                    regex: "$|^",
+                    next: "start"
+                }, {
+                    defaultToken: "text"
+                },
             ]
         };
 	}
@@ -263,56 +314,3 @@ export default class PbasicMode extends window.ace.acequire('ace/mode/text').Mod
         };
 	}
 }
-
-
-
-
-/*
-"start" : [{
-                token : "empty_line",
-                regex : '^$'
-            }, {
-                token : "comment",
-                regex : "'.*"
-            }, {
-                token : "string",
-                regex : "\"[^\"] +\""
-            }, {
-                token : ["string", "incomplete_string"],
-                regex : "\".*"
-            }, {
-                token : ["constant", "double-slash"],
-                regex : "a' ^a"
-            }, {
-                token : "keyword.control",
-                caseInsensitive : true,
-                regex : ' (branch|if|then|goto|gosub|on|run|pollrun|select|case|stop|do|loop|for) '
-            }, {
-               token : ["keyword.control", "keyword"], 
-               caseInsensitive : true,
-               regex : 'endif|return|exit|next'
-               
-            }, {
-                token : "storage",
-                caseInsensitive : true,
-                regex : 'eeprom|data|read|write|store|get|put' 
-            }, {
-                token : ["keyword"],
-                caseInsensitive: true,
-                regex : 'let'
-            }, {
-                token : "keyword",
-                caseInsensitive: true,
-                regex : 'debug'
-            }, {
-               token : "variable-declaration",
-               caseInsensitive: true,
-               regex : ' .* = ' 
-            }, {
-                token : "constant.numeric",
-                caseInsensitive: true,
-                regex : "cr"
-            }, {
-                defaultToken : "text"
-            }]
-*/
