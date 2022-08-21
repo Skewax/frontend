@@ -73,7 +73,7 @@ function App() {
       <Route path="/about" element={
         <About setCookie={setCookie} theme={theme} />
       } />
-      <Route path="/" element={
+      <Route path="/*" element={
         <>
           {(cookies.pageState === true) ? <Navigate to="/editor" /> : <Navigate to="/about" />}
         </>
