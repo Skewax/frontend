@@ -8,6 +8,7 @@ import LoginButton from './auth/login'
 import Files from './auth/files'
 import useDebounce from './useDebounce'
 import { useCookies } from "react-cookie";
+import { Link } from "react-router-dom";
 
 const CLIENT_ID = process.env.REACT_APP_GOOGLE_DRIVE_CLIENT_ID
 const API_KEY = process.env.REACT_APP_GOOGLE_DRIVE_API_KEY
@@ -16,7 +17,7 @@ const SCOPES = 'https://www.googleapis.com/auth/drive.appdata https://www.google
 
 export default function FileManager(props) {
     const [fileCache, setFileCache] = useState(false)
-    const [cookies, setCookie] = useCookies(['selectedFile'])
+    const [cookies, setCookie] = useCookies(['selectedFile', 'pageState'])
     const [user, setUser] = useState(false)
     const [files, setFiles] = useState(false)
     const [activeFile, setActiveFile] = useState(false)
@@ -32,6 +33,7 @@ export default function FileManager(props) {
             })
         }
         gapi.load('client:auth2', start)
+        setCookie('pageState', true)
     })
 
 
@@ -302,12 +304,14 @@ export default function FileManager(props) {
 
     return (
         <div className="w-56 h-full bg-primary flex flex-col bg-slate-50 dark:bg-gray-900 ">
-            <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className="m-3 ml-4 flex-grow"/>
+            <Link to='/about'>
+                <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className="m-3 ml-4 flex-grow cursor-pointer"/>
+            </Link>
             {(user ? 
-                <div className="flex flex-col flex-grow overflow-y-scroll h-max">
+                <div className="flex flex-col flex-grow overflow-y-hidden h-max">
                     {user.imageUrl ? 
                     <div className="relative pt-3 flex-grow" onClick={() => setAccountContext(true)} ref={ref}>
-                        <div className="px-5 absolute  flex items-center cursor-pointer">
+                        <div className="px-5 absolute  flex items-center cursor-pointer bg-slate-50 dark:bg-gray-900">
                             <img src={user.imageUrl} referrerPolicy="no-referrer" alt={"icon"} 
                                 className="rounded-full"
                                 width={40}
@@ -329,6 +333,7 @@ export default function FileManager(props) {
                     </div>
                         : <></>
                     }
+                    <div className="flex flex-col flex-grow overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-700">
                     <Files 
                         files={files}
                         selectFile={selectFile}
@@ -338,6 +343,7 @@ export default function FileManager(props) {
                         renameFile={renameFile}
                         theme={props.theme}
                     />
+                    </div>
                 </div> 
                 :
                 <div className="flex justify-center items-center h-full">

@@ -125,26 +125,32 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
                     next: "string" 
                 }, {
                     token: "storage.type",
-                    regex: "^(" + this.varTypes.join("|")+")(\\s|$)"
+                    regex: "^(" + this.varTypes.join("|")+")(\\s|$)",
+                    caseInsensitive: true
                 }, {
                     token: "markup.italic",
                     regex: "(" + this.comparators.join("|")+")",
+                    caseInsensitive: true,
                     next: "start"
                 }, {
                     token: "keyword",
                     regex: "(^|\\s)(" + this.indentCommands.join("|")+")(\\s|$|\\:)",
+                    caseInsensitive: true,
                     next: "start"
                 }, {
                     token: "keyword",
                     regex: "(^|\\s)(" + this.lineCommands.join("|")+")(\\s|$)",
+                    caseInsensitive: true,
                     next: "start"
                 }, {
                     token: "keyword",
                     regex: "(^|\\s)(" + this.redentCommands.join("|")+")(\\s|$)",
+                    caseInsensitive: true,
                     next: "start"
                 }, {
                     token: "keyword",
                     regex: "(^|\\s)(" + this.outdentCommands.join("|")+")(\\s|$)",
+                    caseInsensitive: true,
                     next: "start" 
                 }, {
                     token: "support.function",
@@ -153,6 +159,7 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
                 }, {
                     token: "constant.numeric",
                     regex: "(^|\\s)(" + this.constants.join("|")+")(\\s|$)",
+                    caseInsensitive: true,
                     next: "start"
                 }
 
