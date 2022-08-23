@@ -4,19 +4,22 @@ import {
     useEffect
 } from "react"
 import { Link } from "react-router-dom"
-
+import FadeIn from "react-fade-in"
 export default function About (props) {
     useEffect(() => {
         props.setCookie('pageState', false)
     })
 
     return (        
-        <div className="min-h-screen h-full dark:bg-slate-800 bg-scroll">
+        <FadeIn
+            delay={100}
+        >
+        <div className="min-h-screen h-full dark:bg-slate-800 bg-scroll z-10">
             <div className="flex flex-col items-center w-full">
                 <img src={props.theme ? "./full-light.svg" : "./full-dark.svg"} alt={"logo"} className=" w-3/4 md:w-1/2 lg:w-1/3 mt-20 flex-grow"/>
                 <div className="mt-5">
                     <span className="font-bold text-slate-600 dark:text-slate-100">
-                        The new IDE keeping PBASIC alive
+                        The modern PBASIC IDE
                     </span>
                 </div>
                 
@@ -42,5 +45,6 @@ export default function About (props) {
                 </div>
             </div>
         </div>
+        </FadeIn>
     )
 }
