@@ -8,14 +8,11 @@ import { useMediaQuery } from 'react-responsive';
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
-  Link,
   Navigate
 } from "react-router-dom";
 import { useCookies } from "react-cookie";
-import { AiOutlineBorderOuter } from "react-icons/ai";
 import About from "./components/about"
 
 function App() {
@@ -25,7 +22,7 @@ function App() {
   const [theme, setTheme] = useState(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   const [fileName, setFileName] = useState('Untitled')
-  const systemPrefersDark = useMediaQuery(
+  useMediaQuery(
     {
       query: '(prefers-color-scheme: dark)',
     },
@@ -35,7 +32,6 @@ function App() {
   const [cookies, setCookie] = useCookies(['pageState'])
 
   return (
-    <Router>
     <Routes>
       <Route path="/editor" element={
         <div className={`flex h-screen ${theme}`}>
@@ -73,13 +69,15 @@ function App() {
       <Route path="/about" element={
         <About setCookie={setCookie} theme={theme} />
       } />
-      <Route path="/" element={
+      <Route index element={
         <>
           {(cookies.pageState === true) ? <Navigate to="/editor" /> : <Navigate to="/about" />}
         </>
       } />
+      <Route path="*" element={<div>
+        <p>page not found</p>
+        </div>} />
     </Routes>
-    </Router>
   );
 }
 

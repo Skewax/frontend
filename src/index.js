@@ -4,10 +4,13 @@ import './index.css';
 import App from './App';
 import { CookiesProvider } from "react-cookie";
 import reportWebVitals from './reportWebVitals';
+import { HashRouter } from "react-router-dom"
 
 ReactDOM.render(
-  <CookiesProvider>   
-    <App />  
+  <CookiesProvider>  
+    <HashRouter>
+      <App />
+    </HashRouter>  
   </CookiesProvider>,  
   document.getElementById('root')
 );
