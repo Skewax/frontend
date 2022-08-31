@@ -5,9 +5,12 @@ import {
 } from "react"
 import { Link } from "react-router-dom"
 import FadeIn from "react-fade-in"
+import { FaGithubSquare } from "react-icons/fa"
+import { BiDonateHeart } from "react-icons/bi"
+
 export default function About (props) {
     useEffect(() => {
-        props.setCookie('pageState', false)
+        props.setCookie('pageState', 'false')
     })
 
     return (        
@@ -36,6 +39,20 @@ export default function About (props) {
                         This made many computers, especially chromebooks, unable to compile and run PBASIC on Basic Stamp hardware. This is why Skewax exists. <br /><br />
                         Skewax can be used on any browser, and can compile on any computer with Chrome. It supports the BS2 hardware and any compatible PBASIC versions.
                     </span>
+                </div>
+                <div className="flex justify-center ">
+                    <a href="https://github.com/Skewax/skewax" className="transition-all transform hover:scale-105 dark:text-slate-300 dark:shadow-sky-900">
+                        <FaGithubSquare 
+                            size={50}
+                        />
+                    </a>
+                    <a href="https://www.paypal.com/donate/?hosted_button_id=AW8NCRDEL5RBS" className={` flex items-center rounded-md h-[45px] mt-[2px] ml-5 p-2 font-bold transition-all transform hover:scale-105 bg-slate-800 text-white dark:bg-slate-300 dark:text-slate-800`}>
+                        <BiDonateHeart 
+                            size={20}
+                            className="mr-2"
+                        />
+                        SUPPORT
+                    </a>
                 </div>
                 <div className="flex justify-center pt-20 lg:pt-10">
                     <img src='./about/ellie-profile.jpeg' alt='Ellie' className="rounded-full shadow-xl h-32 dark:shadow-slate-900 mb-20"/>

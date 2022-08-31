@@ -22,6 +22,8 @@ export default function FileManager(props) {
     const [files, setFiles] = useState(false)
     const [activeFile, setActiveFile] = useState(false)
     const [accountContext, setAccountContext] = useState(false)
+ 
+
 
 
     useEffect(() => {
@@ -33,7 +35,7 @@ export default function FileManager(props) {
             })
         }
         gapi.load('client:auth2', start)
-        setCookie('pageState', true)
+        setCookie('pageState', 'true')
     })
 
 
@@ -220,7 +222,6 @@ export default function FileManager(props) {
         }
         file.selected = true
         setActiveFile(file)
-        props.setFileName(file.name)
     }
 
     
@@ -230,6 +231,7 @@ export default function FileManager(props) {
             setCookie('selectedFile', activeFile.id)
             if(activeFile.cache){
                 props.setCode(activeFile.cache)
+                props.setFileName(activeFile.name)
             }
             gapi.client.drive.files.get({
                 fileId: activeFile.id,
@@ -238,6 +240,7 @@ export default function FileManager(props) {
                 activeFile.cache = response.body
                 props.setCode(activeFile.cache)
                 props.setAwaitingUpload(false)
+                props.setFileName(activeFile.name)
             })
         }
     }, [activeFile])
@@ -333,7 +336,7 @@ export default function FileManager(props) {
                     </div>
                         : <></>
                     }
-                    <div className="flex flex-col flex-grow overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-700">
+                    <div className="flex flex-col flex-grow overflow-y-scroll scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-700">
                     <Files 
                         files={files}
                         selectFile={selectFile}
