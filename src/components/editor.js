@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState, useRef } from "react"
 import AceEditor from "react-ace"
-import { BsCloudCheck, BsMicFill } from "react-icons/bs"
+import { BsCloudCheck } from "react-icons/bs"
 import { AiOutlineReload, AiOutlineQuestionCircle } from "react-icons/ai"
 import { ImCross } from "react-icons/im"
 import 'ace-builds/webpack-resolver'
@@ -9,14 +9,31 @@ import "ace-builds/src-noconflict/theme-xcode"
 import "ace-builds/src-noconflict/theme-dracula"
 import 'ace-builds/src-min-noconflict/ext-searchbox'
 import PbasicMode from "./pbasicrules"
-
-
-
+import { UndoManager } from "ace-builds"
 
 function Editor(props) {
+    //warning user on tab close
+    const message = "Are you sure you want to leave the page? Your work may not be saved"
+    const [msg, setMsg] = useState(message);
+    useEffect(() => {
+        function listener(e) {
+          if (props.loading) {
+            e.preventDefault();
+            e.returnValue = msg;
+            return msg;
+          }
+        }
+    
+        window.addEventListener('beforeunload', listener);
+    
+        return () => {
+          window.removeEventListener('beforeunload', listener);
+        };
+      }, [msg, props.loading]);
 
-    const aceEditorRef = useRef(null);
 
+
+    const aceEditorRef = useRef();
     useEffect(() => {
         const pbasicMode = new PbasicMode();
         if(aceEditorRef.current != null){
@@ -24,9 +41,12 @@ function Editor(props) {
         }
     }, [aceEditorRef])
 
-    useEffect(() => {
 
-    }, [props.theme])
+    useEffect(() => {
+        if(aceEditorRef.current != null) {
+            console.log(aceEditorRef.current.editor.session.getUndoManager().reset())
+        }
+    }, [props.fileName])
 
     const [showModal, setShowModal] = useState(false)
 
@@ -120,7 +140,7 @@ const HelpModal = ({showModal, setShowModal}) => {
         return () => {
           window.removeEventListener('keydown', handleEsc);
         };
-      }, []);
+      });
 
     return(
     <div>

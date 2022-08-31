@@ -82,13 +82,15 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
             'else',
         ]
 
+        this.postdentCommands = [
+            'return',
+            'end',
+        ]
 
         this.outdentCommands = [
-            'return',
             'endif',
             'next',
-            'loop',
-            'else'
+            'loop'
            
         ]
 
@@ -159,6 +161,11 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
                     caseInsensitive: true,
                     next: "start" 
                 }, {
+                    token: "keyword",
+                    regex: "(^|\\s)(" + this.postdentCommands.join("|")+")(\\s|$)",
+                    caseInsensitive: true,
+                    next: "start" 
+                }, {
                     token: "support.function",
                     regex: "^.*:$",
                     next: "start",
@@ -170,10 +177,14 @@ class CustomHighlightRules extends window.ace.acequire("ace/mode/text_highlight_
                 }, 
                 {
                     token: "keyword",
-                    regex: "("+this.varDeclarations.join("|")+")",
+                    regex: "("+this.varDeclarations.join("|")+")(\\s|$)",
                     caseInsensitive: true,
                     next: "var"
-                }
+                }, {
+                    token: "constant.numeric",
+                    regex: "[0-9]",
+                    next: "string"
+                },
             ],
             "string": [
                 {
@@ -284,7 +295,7 @@ export default class PbasicMode extends window.ace.acequire('ace/mode/text').Mod
                 }
                 return !emptys[value] 
             })
-            if(tokens.length === 1 && accessibleRules.outdentCommands.includes(tokens[0])) {
+            if(tokens.length === 1 && accessibleRules.outdentCommands.concat(accessibleRules.redentCommands, accessibleRules.postdentCommands).includes(tokens[0])) {
                 return 1
             }
             return 0
@@ -299,10 +310,16 @@ export default class PbasicMode extends window.ace.acequire('ace/mode/text').Mod
                 }
                 return !emptys[value]
             })
+            tokens[0] = tokens[0].toLowerCase()
             var indent = this.$getIndent(doc.getLine(row));
             var tab = doc.getTabString();
-            if (indent.slice(-tab.length) === tab)
-            doc.remove(new Range(row, indent.length-tab.length, row, indent.length));
+            console.log(tokens)
+            //self line indent
+            if (indent.slice(-tab.length) === tab && !accessibleRules.postdentCommands.includes(tokens[0])) {
+                doc.remove(new Range(row, indent.length-tab.length, row, indent.length));
+            }
+            //next line indent
+
             if (!accessibleRules.redentCommands.includes(tokens[0])) {
                 row += 1; 
                 indent = this.$getIndent(doc.getLine(row));
