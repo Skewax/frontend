@@ -3,8 +3,7 @@ import { BsFileEarmarkText } from 'react-icons/bs'
 import {
     Menu,
     Item,
-    useContextMenu,
-    theme
+    useContextMenu
   } from "react-contexify";
 import { useHotkeys } from 'react-hotkeys-hook';
 import "react-contexify/dist/ReactContexify.css";

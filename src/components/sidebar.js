@@ -74,7 +74,7 @@ export default function Sidebar(props) {
 
     async function connect() {
         setPort(await navigator.serial.requestPort({
-            //filters: [{ usbVendorId: '1027' }]
+            filters: [{ usbVendorId: '1027' }]
         }))
     }
 
